@@ -1,6 +1,9 @@
 # PySideApp
 Minimal application demonstrating core features for deployable applications
 
+PySideApp is designed to be the baseline project structure for the next
+level of Wasatch Photonics customer facing software. The main design
+goals are:
 
 PySide Gui application development
     Develop on Windows and Linux with PySide 
@@ -19,6 +22,7 @@ Multiprocessing:
     Provide framework for long-polling reads from hardware
 
 Logging:
+    Capture log output in test, verify logging configuration
     Log from multiple processes on multiple platforms
 
 Executable building:

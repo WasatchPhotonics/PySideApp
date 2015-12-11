@@ -1,5 +1,4 @@
 """ tests for gui layout using pyside
-
 """
 
 import pytest
@@ -7,15 +6,9 @@ import pytest
 from PySide import QtCore, QtTest
 
 from pysideapp import views
+from pysideapp import custom_logging
 
-import sys
-import logging
-log = logging.getLogger()
-strm = logging.StreamHandler(sys.stdout)
-frmt = logging.Formatter("%(name)s - %(levelname)s %(message)s")
-strm.setFormatter(frmt)
-log.addHandler(strm)
-log.setLevel(logging.DEBUG)
+log = custom_logging.to_stdout()
 
 class TestBasicWindow:
 
@@ -56,4 +49,3 @@ class TestBasicWindow:
         self.visualization_wait(my_form, qtbot)
 
         assert "Button clicked" in my_form.lbl_info.text()
-
