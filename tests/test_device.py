@@ -28,5 +28,7 @@ class TestMultiprocessingDevice:
         assert mp_device.started == False
 
 
-    #def test_sub_process_logs_are_received(self):
+    #def test_sub_process_logs_are_received_in_pytest_mode(self):
+
+    #def test_sub_process_logs_are_discarded_without_pytest_mode(self):
 
