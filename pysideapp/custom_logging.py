@@ -45,6 +45,28 @@ def get_location():
 
     return(log_dir)
 
+
+
+def dependent_create(log, in_pytest=False):
+    """ If operating on MS windows in a multiprocessing context
+    while using pytest, the log prints to stdout will not appear.
+    Create a new logger with a formatter to stdout if operating on
+    windows only, and only if called within pytest. If you only
+    check if within pytest and create the logger on linux, you will
+    have two identical loggers.
+    """
+    if in_pytest == False:
+        log.info("Non pytest, return existing log")
+        return log
+
+    if "Windows" in platform.platform():
+        self.my_log = custom_logging.to_stdout()
+        self.my_log.debug("Custom pytest windows log setup")
+        return self.my_log
+
+    log.info("In pytest, return existing log")
+    return log
+
 def to_file_and_stdout(application_name="PySideApp"):
     log = to_stdout()
 

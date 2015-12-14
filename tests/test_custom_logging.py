@@ -78,23 +78,14 @@ class TestCustomLogging:
 
 
     def log_file_created(self):
-        filename = "PySideApp_log.txt"
-        if "Linux" in platform.platform():
-            filename = "./%s" % filename
-        else:
-            filename = "c:\ProgramData\%s" % filename
-
+        filename = self.platform_specific_filename()
         if os.path.exists(filename):
             return True
 
         return False
 
     def log_file_does_not_exist(self):
-        filename = "PySideApp_log.txt"
-        if "Linux" in platform.platform():
-            filename = "./%s" % filename
-        else:
-            filename = "c:\ProgramData\%s" % filename
+        filename = self.platform_specific_filename()
 
         if os.path.exists(filename):
             os.remove(filename)
@@ -108,14 +99,16 @@ class TestCustomLogging:
         """ Mimic the capturelog style of just slurping the entire log
         file contents.
         """
-        filename = "PySideApp_log.txt"
+
+        log_text = ""
+        log_file = open(self.platform_specific_filename())
+        for line_read in log_file:
+            log_text += line_read
+        return log_text
+
+    def platform_specific_filename(self, filename="PySideApp_log.txt"):
         if "Linux" in platform.platform():
             filename = "./%s" % filename
         else:
             filename = "c:\ProgramData\%s" % filename
-
-        log_text = ""
-        log_file = open(filename)
-        for line_read in log_file:
-            log_text += line_read
-        return log_text
+        return filename

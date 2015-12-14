@@ -33,7 +33,7 @@ class ExampleObjectThatLogs(object):
         """ Simple log of text, designed for text processing in the
         test script to verify the logging configuration.
         """
-        log = custom_logging.to_file_and_stdout()
+        mylog = custom_logging.dependent_create(log)
 
         log.debug("multiprocess perform check")
         log.info("multiprocess perform check")
