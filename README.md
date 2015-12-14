@@ -50,7 +50,7 @@ Running tests:
         py.test tests/test_device.py --capture=no
 
         If pytest-capturelog is installed:
-        py.test tests/test_device.py --capture=no --nocapturelog
+        py.test tests/test_device.py --capture=no 
 
 
 

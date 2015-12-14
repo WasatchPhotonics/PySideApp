@@ -2,9 +2,7 @@
 
 This module is designed to provide a single interface for custom
 application wide log configuration.
-
 """
-
 
 import sys
 import logging

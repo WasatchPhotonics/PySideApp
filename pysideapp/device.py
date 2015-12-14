@@ -11,16 +11,38 @@ from pysideapp import custom_logging
 import logging
 log = logging.getLogger(__name__)
 
-class ExampleObject(object):
+class ExampleObjectThatLogs(object):
+    """ Bare bonese example to used in testing to verify log
+    capabilities. Ensures that logging from sub-processes on windows also
+    appear in testing.
+    """
     def __init__(self):
         log.debug("Init of %s", self.__class__.__name__)
-        super(ExampleObject, self).__init__()
+        super(ExampleObjectThatLogs, self).__init__()
 
     def perform_check(self):
+        """ Simple log of text, designed for text processing in the
+        test script to verify the logging configuration.
+        """
         log.debug("perform check")
         log.info("perform check")
         log.warning("perform check")
         log.critical("perform check")
+
+    def multiprocess_perform_check(self):
+        """ Create a separate process, simualting how devices are
+        actually used to retain interface usability. Designed to be used
+        in the test script to verify the logging configuration.
+        """
+        log.debug("Setup multiprocessing log emits")
+        mpp = multiprocessing.Process
+        self.process = mpp(target=self.perform_check)
+        self.process.daemon = True
+        self.process.start()
+        time.sleep(1.0)
+        self.process.join()
+        log.debug("Close multiprocessing log emits")
+
 
 class QueueMPDevice(object):
     """ Use the poison pill pattern to exit the worker process. Create
