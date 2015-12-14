@@ -11,6 +11,17 @@ from pysideapp import custom_logging
 import logging
 log = logging.getLogger(__name__)
 
+class ExampleObject(object):
+    def __init__(self):
+        log.debug("Init of %s", self.__class__.__name__)
+        super(ExampleObject, self).__init__()
+
+    def perform_check(self):
+        log.debug("perform check")
+        log.info("perform check")
+        log.warning("perform check")
+        log.critical("perform check")
+
 class QueueMPDevice(object):
     """ Use the poison pill pattern to exit the worker process. Create
     the started variable for external testability of process
