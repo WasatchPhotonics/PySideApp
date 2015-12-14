@@ -2,6 +2,7 @@
 """
 
 import os
+import platform
 
 from pysideapp import custom_logging
 from pysideapp import device
@@ -64,20 +65,25 @@ class TestCustomLogging:
         log = custom_logging.to_file_and_stdout()
 
         example = device.ExampleObjectThatLogs()
-        example.multiprocess_perform_check()
+        example.multiprocess_setup_child()
 
         assert self.log_file_created() == True
 
         log_text = self.get_text_from_log()
-        assert "DEBUG perform check" in log_text
-        assert "INFO perform check" in log_text
-        assert "WARNING perform check" in log_text
-        assert "CRITICAL perform check" in log_text
+        assert "DEBUG multiprocess perform check" in log_text
+        assert "INFO multiprocess perform check" in log_text
+        assert "WARNING multiprocess perform check" in log_text
+        assert "CRITICAL multiprocess perform check" in log_text
 
 
 
     def log_file_created(self):
         filename = "PySideApp_log.txt"
+        if "Linux" in platform.platform():
+            filename = "./%s" % filename
+        else:
+            filename = "c:\ProgramData\%s" % filename
+
         if os.path.exists(filename):
             return True
 
@@ -85,6 +91,11 @@ class TestCustomLogging:
 
     def log_file_does_not_exist(self):
         filename = "PySideApp_log.txt"
+        if "Linux" in platform.platform():
+            filename = "./%s" % filename
+        else:
+            filename = "c:\ProgramData\%s" % filename
+
         if os.path.exists(filename):
             os.remove(filename)
 
@@ -97,8 +108,14 @@ class TestCustomLogging:
         """ Mimic the capturelog style of just slurping the entire log
         file contents.
         """
+        filename = "PySideApp_log.txt"
+        if "Linux" in platform.platform():
+            filename = "./%s" % filename
+        else:
+            filename = "c:\ProgramData\%s" % filename
+
         log_text = ""
-        log_file = open("PySideApp_log.txt")
+        log_file = open(filename)
         for line_read in log_file:
             log_text += line_read
         return log_text

@@ -30,13 +30,24 @@ class ExampleObjectThatLogs(object):
         log.critical("perform check")
 
     def multiprocess_perform_check(self):
+        """ Simple log of text, designed for text processing in the
+        test script to verify the logging configuration.
+        """
+        log = custom_logging.to_file_and_stdout()
+
+        log.debug("multiprocess perform check")
+        log.info("multiprocess perform check")
+        log.warning("multiprocess perform check")
+        log.critical("multiprocess perform check")
+
+    def multiprocess_setup_child(self):
         """ Create a separate process, simualting how devices are
         actually used to retain interface usability. Designed to be used
         in the test script to verify the logging configuration.
         """
         log.debug("Setup multiprocessing log emits")
         mpp = multiprocessing.Process
-        self.process = mpp(target=self.perform_check)
+        self.process = mpp(target=self.multiprocess_perform_check)
         self.process.daemon = True
         self.process.start()
         time.sleep(1.0)

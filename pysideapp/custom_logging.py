@@ -20,8 +20,7 @@ def to_stdout():
 
 def get_location():
     """ Determine the location to store the log file. Current directory
-    on Linux, or %APPDATA% on windows - usually
-    c:\Users\Username\AppData\Roaming
+    on Linux, or %PROGRAMDATA% on windows - usually c:\ProgramData\
     """
     log_dir = "./"
 
@@ -57,4 +56,5 @@ def to_file_and_stdout(application_name="PySideApp"):
     file_handler.setFormatter(frmt)
 
     log.addHandler(file_handler)
+    log.debug("Log file is: %s", log_dir)
     return log
