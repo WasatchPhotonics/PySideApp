@@ -49,3 +49,20 @@ class TestBasicWindow:
         self.visualization_wait(my_form, qtbot)
 
         assert "Button clicked" in my_form.lbl_info.text()
+
+    def test_logging_control_is_available(self, my_form, qtbot):
+        QtTest.QTest.qWaitForWindowShown(my_form)
+
+        self.visualization_wait(my_form, qtbot)
+        assert my_form.txt_log.toPlainText() == "Log text area"
+
+    def test_button_click_adds_to_log_text(self, my_form, qtbot):
+        qtbot.mouseClick(my_form.button, QtCore.Qt.LeftButton)
+
+        self.visualization_wait(my_form, qtbot)
+
+        expect_str = "Log text area\nButton clicked"
+        actual_str = my_form.txt_log.toPlainText() 
+        assert expect_str in actual_str
+
+
