@@ -45,6 +45,8 @@ class QueueMPDevice(object):
             self.my_log.debug("Custom pytest windows log setup")
             return self.my_log
 
+        return log
+
     def worker(self, queue, in_pytest):
         """ Run forever until an poison pill is received. First setup a
         log so the pytest output looks the same as the executed python
