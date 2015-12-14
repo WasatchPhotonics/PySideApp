@@ -6,6 +6,7 @@ import pytest
 from PySide import QtCore, QtTest
 
 from pysideapp import views
+from pysideapp import device
 from pysideapp import custom_logging
 
 log = custom_logging.to_stdout()
@@ -61,8 +62,20 @@ class TestBasicWindow:
 
         self.visualization_wait(my_form, qtbot)
 
-        expect_str = "Log text area\nButton clicked"
-        actual_str = my_form.txt_log.toPlainText() 
+        expect_str = "Log text area\npysideapp.views Button clicked"
+        actual_str = my_form.txt_log.toPlainText()
         assert expect_str in actual_str
 
+    def test_subprocess_logging_adds_to_log_text(self, my_form, qtbot):
+        qtbot.mouseClick(my_form.button, QtCore.Qt.LeftButton)
 
+        self.visualization_wait(my_form, qtbot, timeout=3000)
+
+        example = device.ExampleObjectThatLogs()
+        example.multiprocess_setup_child()
+
+        self.visualization_wait(my_form, qtbot, timeout=3000)
+        expect_str = "INFO multiprocess perform che"
+        actual_str = my_form.txt_log.toPlainText()
+        assert expect_str in actual_str
+        print "actual string is: %s" % actual_str

@@ -49,6 +49,7 @@ class BasicWindow(QtGui.QMainWindow):
         log.addHandler(self.qtl_handler)
         self.qtl_handler.lts.log_update.connect(self.on_log)
 
+
     def change_text(self):
         new_txt = "Button clicked: %s" % datetime.datetime.now()
         self.lbl_info.setText(new_txt)
@@ -69,14 +70,17 @@ class QTLogHandler(logging.Handler):
     interface.
     """
     def __init__(self):
-        logging.Handler.__init__(self)
+        super(QTLogHandler, self).__init__()
         self.lts = LogToSignal()
 
     def emit(self, log_record):
-        print "Entire record: %s" % log_record
+        """ Why is the formatter not applied? Why can't you do
+        log_record.asctime?
+        """
         #rec_str = str(record.asctime) + " " + str(record.levelname) \
                   #+ " " + str(record.message)
-        rec_str = log_record.msg
+        rec_str = "%s %s" % (log_record.name, log_record.msg)
+        #print "Set rec_str to: %s" % rec_str
         self.lts.log_update.emit(rec_str)
 
 # Follows the example documentation to create a QObject based class used to
