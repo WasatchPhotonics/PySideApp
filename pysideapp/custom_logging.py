@@ -60,9 +60,9 @@ def dependent_create(log, in_pytest=False):
         return log
 
     if "Windows" in platform.platform():
-        self.my_log = custom_logging.to_stdout()
-        self.my_log.debug("Custom pytest windows log setup")
-        return self.my_log
+        my_log = to_file_and_stdout()
+        my_log.debug("Custom pytest windows log setup")
+        return my_log
 
     log.info("In pytest, return existing log")
     return log
