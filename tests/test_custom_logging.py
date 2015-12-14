@@ -38,6 +38,25 @@ class TestCustomLogging:
 
         self.explicit_log_close(log)
 
+
+    def test_multiprocessing_captured_in_stdout(self, capfd):
+        assert self.log_file_does_not_exist() == True
+        log = custom_logging.to_file_and_stdout()
+
+        example = device.ExampleObjectThatLogs()
+        example.multiprocess_setup_child()
+
+        #print "Capsys output: %s, %s" % capsys.readouterr()
+        print "FD output: %s, %s" % capfd.readouterr()
+        capfd_txt = capfd.readouterr()[0]
+        assert "DEBUG multiprocess perform che" in capfd_txt
+        assert "INFO multiprocess perform che" in capfd_txt
+        assert "WARNING multiprocess perform che" in capfd_txt
+        assert "CRITICAL multiprocess perform che" in capfd_txt
+
+        self.explicit_log_close(log)
+
+
     def test_logging_setup_creates_file(self):
         assert self.log_file_does_not_exist() == True
         log = custom_logging.to_file_and_stdout()
