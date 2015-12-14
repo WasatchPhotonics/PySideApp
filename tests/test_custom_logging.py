@@ -19,8 +19,9 @@ class TestCustomLogging:
         assert "CRITICAL perform check" in caplog.text()
 
     def test_multiprocessing_representative_object_loggin(self, caplog):
-        #example = device.ExampleObjectThatLogs()
-        #example.multiprocess_perform_check()
+        example = device.ExampleObjectThatLogs()
+        example.multiprocess_perform_check()
+        self.explicit_log_close(log)
         return
         # Expect fail here, do manual tests with application to
         # verify that it is saved to file.
