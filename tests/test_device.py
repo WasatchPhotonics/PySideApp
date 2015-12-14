@@ -28,6 +28,17 @@ class TestMultiprocessingDevice:
         assert mp_device.started == False
 
 
+    def test_only_worker_portion_pytest_coverage_workaround(self):
+        import multiprocessing
+        mp_device = device.QueueMPDevice(in_pytest=True)
+
+        local_queue = multiprocessing.Queue()
+        in_pytest = True
+
+        local_queue.put("DISCONNECT")
+        mp_device.worker(local_queue, in_pytest)
+        
+       
     #def test_sub_process_logs_are_received_in_pytest_mode(self):
 
     #def test_sub_process_logs_are_discarded_without_pytest_mode(self):

@@ -34,6 +34,9 @@ Installer creation:
 
 Running tests:
 
+    First, install the python package in development mode:
+        python setup.py develop
+
     All Tests:
         py.test tests/ --cov=pysideapp 
 
