@@ -2,7 +2,6 @@
 """
 
 import os
-import pytest
 import platform
 
 from pysideapp import custom_logging
@@ -18,22 +17,26 @@ class TestCustomLogging:
         assert "WARNING  perform check" in caplog.text()
         assert "CRITICAL perform check" in caplog.text()
 
-    def test_multiprocessing_representative_object_loggin(self, caplog):
+    def test_multiprocessing_representative_object_logging(self, caplog):
+        assert self.log_file_does_not_exist() == True
+        log = custom_logging.to_file_and_stdout()
+
         example = device.ExampleObjectThatLogs()
-        example.multiprocess_perform_check()
-        self.explicit_log_close(log)
-        return
-        # Expect fail here, do manual tests with application to
-        # verify that it is saved to file.
+        example.multiprocess_setup_child()
+
+        # Expect failure here, as the log capture plugin does not seem
+        # to be able to detect log entries from sub processes on
+        # windows. See the tests below for ensuring they do print to the
+        # file.
         #
         # Then add in qtsignal on log to verify can be logged in gui
         # from child process
-        assert "DEBUG    Setup multiprocessing log emits"
-        assert "DEBUG    perform check" in caplog.text()
-        assert "INFO     perform check" in caplog.text()
-        assert "WARNING  perform check" in caplog.text()
-        assert "CRITICAL perform check" in caplog.text()
-        assert "DEBUG    Close multiprocessing log emits"
+        assert "DEBUG    multiprocess perform che" not in caplog.text()
+        assert "INFO     multiprocess perform che" not in caplog.text()
+        assert "WARNING  multiprocess perform che" not in caplog.text()
+        assert "CRITICAL multiprocess perform che" not in caplog.text()
+
+        self.explicit_log_close(log)
 
     def test_logging_setup_creates_file(self):
         assert self.log_file_does_not_exist() == True
