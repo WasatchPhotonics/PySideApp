@@ -37,11 +37,8 @@ Running tests:
     First, install the python package in development mode:
         python setup.py develop
 
-    All Tests:
-        py.test tests/ --cov=pysideapp 
-
-    With coverage report showing missing lines:
-        coverage report -m 
+    All Tests, with coverage report showing missing lines:
+        py.test tests/ --cov=pysideapp --cov-report term-missing
 
     Individually:
         py.test tests/test_views.py 
@@ -51,6 +48,9 @@ Running tests:
 
     Showing log prints during the process:
         py.test tests/test_device.py --capture=no
+
+        If pytest-capturelog is installed:
+        py.test tests/test_device.py --capture=no --nocapturelog
 
 
 

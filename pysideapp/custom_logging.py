@@ -17,3 +17,13 @@ def to_stdout():
     log.addHandler(strm)
     log.setLevel(logging.DEBUG)
     return log
+
+
+
+#class ExampleObject(object):
+#    def __init__(self):
+#        log.debug("Init of %s", self.__class__.__name__)
+#        super(ExampleObject, self).__init__()
+#
+#    def perform_check(self):
+#        log.

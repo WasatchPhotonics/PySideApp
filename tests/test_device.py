@@ -29,7 +29,6 @@ class TestMultiprocessingDevice:
 
 
     def test_only_worker_portion_pytest_coverage_workaround(self):
-        return
         import multiprocessing
         mp_device = device.QueueMPDevice(in_pytest=True)
 
