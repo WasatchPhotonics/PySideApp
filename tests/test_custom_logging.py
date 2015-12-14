@@ -40,14 +40,23 @@ class TestCustomLogging:
 
 
     def test_multiprocessing_captured_in_stdout(self, capfd):
+        """ Capture the pure stdout output and verify the log prints do
+        appear. This would be nice if you could use caplog, but
+        apparently this is the only way to detect sub process children's
+        stdout. The custom logging windows and pytest detection is to
+        recreate the logger on windows and disable it if running in
+        pytest on linux (to not get double prints on linux)
+        """
         assert self.log_file_does_not_exist() == True
         log = custom_logging.to_file_and_stdout()
 
         example = device.ExampleObjectThatLogs()
         example.multiprocess_setup_child()
 
-        #print "Capsys output: %s, %s" % capsys.readouterr()
-        print "FD output: %s, %s" % capfd.readouterr()
+        # The danger here is that you won't see useful test output, as
+        # the print statements are swallowed by capfd - you may have to
+        # write the debug statements to file
+        #print "FD output: %s, %s" % capfd.readouterr()
         capfd_txt = capfd.readouterr()[0]
         assert "DEBUG multiprocess perform che" in capfd_txt
         assert "INFO multiprocess perform che" in capfd_txt
