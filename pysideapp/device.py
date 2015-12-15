@@ -100,7 +100,10 @@ class QueueMPDevice(object):
         windows, as it will hange. Use the catch of the queue empty
         exception as shown below instead.
         """
-        log = self.create_new_log_on_windows_with_pytest(in_pytest)
+        #log = self.create_new_log_on_windows_with_pytest(in_pytest)
+        result, mylog = custom_logging.dependent_create(in_pytest=True)
+        if result:
+            log = mylog
 
         while(True):
             # Don't use if queue.empty() -- see above

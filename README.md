@@ -1,6 +1,9 @@
 # PySideApp
 Minimal application demonstrating core features for deployable applications
 
+[![Build Status](https://travis-ci.org/WasatchPhotonics/PySideApp.svg?branch=master)]
+
+
 PySideApp is designed to be the baseline project structure for the next
 level of Wasatch Photonics customer facing software. The main design
 goals are:
