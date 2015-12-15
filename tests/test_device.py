@@ -17,7 +17,6 @@ class TestMultiprocessingDevice:
         """
         mp_device = device.QueueMPDevice(in_pytest=True)
         mp_device.create()
-        time.sleep(sleep_dur)
 
         assert mp_device.started == True
 
