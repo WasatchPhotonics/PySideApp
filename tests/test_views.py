@@ -13,13 +13,19 @@ log = custom_logging.to_stdout()
 
 class TestBasicWindow:
 
-    @pytest.fixture
-    def my_form(self, qtbot):
+    @pytest.fixture(scope="function")
+    def my_form(self, qtbot, request):
         """ Create the new QMainWindow from the view at every test
         setup.
         """
         log.debug("Setup form fixture")
         new_form = views.BasicWindow()
+
+        # Close the form when the test ends
+        def form_close():
+            new_form.close()
+        request.addfinalizer(form_close)
+
         return new_form
 
     def visualization_wait(self, my_form, qtbot, timeout=1000):
@@ -66,16 +72,3 @@ class TestBasicWindow:
         actual_str = my_form.txt_log.toPlainText()
         assert expect_str in actual_str
 
-    def test_subprocess_logging_adds_to_log_text(self, my_form, qtbot):
-        qtbot.mouseClick(my_form.button, QtCore.Qt.LeftButton)
-
-        self.visualization_wait(my_form, qtbot, timeout=3000)
-
-        example = device.ExampleObjectThatLogs()
-        example.multiprocess_setup_child()
-
-        self.visualization_wait(my_form, qtbot, timeout=3000)
-        expect_str = "INFO multiprocess perform che"
-        actual_str = my_form.txt_log.toPlainText()
-        assert expect_str in actual_str
-        print "actual string is: %s" % actual_str

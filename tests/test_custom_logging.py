@@ -28,9 +28,6 @@ class TestCustomLogging:
         # to be able to detect log entries from sub processes on
         # windows. See the tests below for ensuring they do print to the
         # file.
-        #
-        # Then add in qtsignal on log to verify can be logged in gui
-        # from child process
         assert "DEBUG    multiprocess perform che" not in caplog.text()
         assert "INFO     multiprocess perform che" not in caplog.text()
         assert "WARNING  multiprocess perform che" not in caplog.text()
@@ -56,7 +53,6 @@ class TestCustomLogging:
         # The danger here is that you won't see useful test output, as
         # the print statements are swallowed by capfd - you may have to
         # write the debug statements to file
-        #print "FD output: %s, %s" % capfd.readouterr()
         capfd_txt = capfd.readouterr()[0]
         assert "DEBUG multiprocess perform che" in capfd_txt
         assert "INFO multiprocess perform che" in capfd_txt
@@ -84,7 +80,6 @@ class TestCustomLogging:
         self.explicit_log_close(log)
 
     def test_logging_setup_file_updated_by_sub_process(self):
-
         assert self.log_file_does_not_exist() == True
         log = custom_logging.to_file_and_stdout()
 

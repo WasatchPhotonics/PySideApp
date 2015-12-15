@@ -2,7 +2,6 @@
 bare bones interface with a single button that changes the text to the
 current timestamp. Used to demonstrate pytest-qt qtbot button clicking.
 """
-
 import datetime
 
 from PySide import QtGui, QtCore
@@ -14,7 +13,7 @@ class BasicWindow(QtGui.QMainWindow):
     """ Provie a bare form layout with basic interactivity.
     """
     def __init__(self, parent=None):
-        log.debug("Init of %s", self.__class__.__name__)
+        log.debug("Init of %s" % self.__class__.__name__)
         super(BasicWindow, self).__init__(parent)
 
         # The main widget. Certain implementations will still create a
@@ -49,12 +48,11 @@ class BasicWindow(QtGui.QMainWindow):
         log.addHandler(self.qtl_handler)
         self.qtl_handler.lts.log_update.connect(self.on_log)
 
-
     def change_text(self):
         new_txt = "Button clicked: %s" % datetime.datetime.now()
         self.lbl_info.setText(new_txt)
+        print "STDOUT: %s" % new_txt
         log.debug(new_txt)
-
 
     def on_log(self, input_text):
         """ Append the new text to the logging text edit control.
@@ -62,8 +60,6 @@ class BasicWindow(QtGui.QMainWindow):
         print "In on log with [%s]" % input_text
         self.txt_log.append(input_text)
 
-# Hook into the python native logging module to catch all lower level logging
-# events and emit a signal to be processed by the qt interface
 class QTLogHandler(logging.Handler):
     """ Hook into the python native logging module to catch all lower
     level logging events and emit a signal to be processed by the qt
