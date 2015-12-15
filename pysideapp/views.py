@@ -79,7 +79,8 @@ class QTLogHandler(logging.Handler):
         #print "Set rec_str to: %s" % rec_str
         self.lts.log_update.emit(rec_str)
 
-# Follows the example documentation to create a QObject based class used to
-# re-emit the log string caught by the handler
 class LogToSignal(QtCore.QObject):
+    """ Follows the example documentation to create a QObject based
+    class used to re-emit the log string caught by the handler.
+    """
     log_update = QtCore.Signal("QString")

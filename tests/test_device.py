@@ -6,7 +6,7 @@ import time
 from pysideapp import device
 from pysideapp import custom_logging
 
-log = custom_logging.to_stdout()
+log = custom_logging.to_file_and_stdout()
 
 class TestMultiprocessingDevice:
     def test_poison_pill_technique(self):

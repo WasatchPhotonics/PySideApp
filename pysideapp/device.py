@@ -97,7 +97,7 @@ class QueueMPDevice(object):
         application.
 
         Don't use if queue.empty() for flow control on python 2.7 on
-        windows, as it will hange. Use the catch of the queue empty
+        windows, as it will hang. Use the catch of the queue empty
         exception as shown below instead.
         """
         log = self.create_new_log_on_windows_with_pytest(in_pytest)
@@ -110,7 +110,6 @@ class QueueMPDevice(object):
                     log.debug("Disonnect received, exiting loop")
                     break
             except Queue.Empty:
-                #log.debug("Queue is empty")
                 pass
 
             current = multiprocessing.current_process()
@@ -120,7 +119,7 @@ class QueueMPDevice(object):
     def create(self):
         """ Start the running of the multiprocessing object. In an
         actual application you might also place commands on the queue to
-        perform work inside the worker.
+        perform work inside the worker while loop.
         """
         log.debug("Start the multiprocessing object")
         self.process.start()
