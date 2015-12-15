@@ -33,16 +33,7 @@ class ExampleObjectThatLogs(object):
         """ Simple log of text, designed for text processing in the
         test script to verify the logging configuration.
         """
-        #mylog = custom_logging.dependent_create(log, in_pytest=True)
-        in_pytest = True
-        if in_pytest == False:
-            log.info("Non pytest, return existing log")
-    
-        if "Windows" in platform.platform():
-            my_log = custom_logging.to_file_and_stdout()
-            my_log.debug("Custom pytest windows log setup")
-            log = my_log
-    
+        mylog = custom_logging.dependent_create(log, in_pytest=True)
 
         log.debug("multiprocess perform check")
         log.info("multiprocess perform check")

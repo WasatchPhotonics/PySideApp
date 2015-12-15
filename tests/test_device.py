@@ -37,6 +37,7 @@ class TestMultiprocessingDevice:
 
         local_queue.put("DISCONNECT")
         mp_device.worker(local_queue, in_pytest)
+
     #def test_sub_process_logs_are_received_in_pytest_mode(self):
 
     #def test_sub_process_logs_are_discarded_without_pytest_mode(self):
