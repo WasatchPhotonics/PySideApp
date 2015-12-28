@@ -122,7 +122,7 @@ def listener_process(queue, configurer):
                 break
             logger = logging.getLogger(record.name)
             logger.handle(record) # No level or filter logic applied - just do it!
-            print "Actual log process for %s" % record.msg
+            #print "Actual log process for %s" % record.msg
 
             # Can't do this - not picklable
             #update_function(record.msg)
