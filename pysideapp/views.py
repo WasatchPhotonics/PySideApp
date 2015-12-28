@@ -6,6 +6,7 @@ import datetime
 
 from PySide import QtGui, QtCore
 
+import Queue
 import logging
 log = logging.getLogger(__name__)
 
@@ -36,12 +37,17 @@ class BasicWindow(QtGui.QMainWindow):
         self.txt_log = QtGui.QTextEdit("Log text area")
         self.vbox.addWidget(self.txt_log)
 
+        self.deep_log = QtGui.QTextEdit("deep log")
+        self.vbox.addWidget(self.deep_log)
+
+
         self.button.clicked.connect(self.change_text)
 
-        self.setup_signals()
+        #self.setup_signals()
 
         self.setGeometry(30, 30, 400, 400)
         self.show()
+
 
     def setup_signals(self):
         self.qtl_handler = QTLogHandler()
@@ -59,6 +65,64 @@ class BasicWindow(QtGui.QMainWindow):
         """
         #print "In on log with [%s]" % input_text
         self.txt_log.append(input_text)
+
+    def qt_log_setup(self, queue):
+        self.log_queue = queue
+        self.qt_listener_configurer()
+        print "Post QT listener configurer"
+
+        self.log_timer = QtCore.QTimer()
+        self.log_timer.setSingleShot(True)
+        self.log_timer.timeout.connect(self.qt_listener_process)
+        self.log_timer.start(0)
+
+
+    def qt_listener_configurer(self):
+        root = logging.getLogger()
+        #h = logging.handlers.RotatingFileHandler('/tmp/mptest.log', 'a', 300, 10)
+        h = logging.handlers.RotatingFileHandler('mptest.log', 'w')
+        f = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
+        h.setFormatter(f)
+        root.addHandler(h)
+
+        import sys
+        strm = logging.StreamHandler(sys.stdout)
+        frmt = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
+        strm.setFormatter(frmt)
+        root.addHandler(strm)
+
+    def qt_listener_process(self):
+        #print "setup qt listener process"
+
+        try:
+            record = self.log_queue.get_nowait()
+            if record is None: # We send this as a sentinel to tell the listener to quit.
+                return
+            logger = logging.getLogger(record.name)
+            logger.handle(record) # No level or filter logic applied - just do it!
+            print "QT Actual log process for %s" % record.msg
+
+            # Update the current interface
+            self.on_log(record.msg)
+   
+            # Can't do this - not picklable
+            #update_function(record.msg)
+        except Queue.Empty:
+            # Older version of python on windows hang on if 
+            # queue.empty()
+            #print "Queue empty"
+            pass
+
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:
+            import sys, traceback
+            print >> sys.stderr, 'Whoops! Problem:'
+            traceback.print_exc(file=sys.stderr)
+
+        #print "Every log timer start"
+        self.log_timer.start(0)
+
 
 class QTLogHandler(logging.Handler):
     """ Hook into the python native logging module to catch all lower
