@@ -8,7 +8,21 @@ from PySide import QtGui, QtCore
 
 import Queue
 import logging
+# This does not write out the log.debug("XXXXX") entries to stdout or
+# stderr
 log = logging.getLogger(__name__)
+
+# This does not write out the log.debug("XXXXX") entries to stdout or
+# stderr
+#import sys
+#log = logging.getLogger()
+#strm = logging.StreamHandler(sys.stderr)
+#frmt = logging.Formatter("%(name)s - %(levelname)s %(message)s")
+#strm.setFormatter(frmt)
+#log.addHandler(strm)
+#log.setLevel(logging.INFO)
+
+
 
 class BasicWindow(QtGui.QMainWindow):
     """ Provie a bare form layout with basic interactivity.
@@ -59,6 +73,8 @@ class BasicWindow(QtGui.QMainWindow):
         self.lbl_info.setText(new_txt)
         log.debug(new_txt)
         print "post log debug STDOUT: %s" % new_txt
+        root = logging.getLogger()
+        root.debug("After get logger: %s", new_txt)
 
     def on_log(self, input_text):
         """ Append the new text to the logging text edit control.
@@ -74,7 +90,7 @@ class BasicWindow(QtGui.QMainWindow):
         self.log_timer = QtCore.QTimer()
         self.log_timer.setSingleShot(True)
         self.log_timer.timeout.connect(self.qt_listener_process)
-        self.log_timer.start(0)
+        self.log_timer.start(100)
 
 
     def qt_listener_configurer(self):
@@ -85,11 +101,15 @@ class BasicWindow(QtGui.QMainWindow):
         h.setFormatter(f)
         root.addHandler(h)
 
+
         import sys
         strm = logging.StreamHandler(sys.stdout)
         frmt = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
         strm.setFormatter(frmt)
         root.addHandler(strm)
+
+        print "About to call mid debug logger"
+        root.debug("\n\nMid debug loggerl#######################")
 
     def qt_listener_process(self):
         #print "setup qt listener process"
@@ -97,6 +117,7 @@ class BasicWindow(QtGui.QMainWindow):
         try:
             record = self.log_queue.get_nowait()
             if record is None: # We send this as a sentinel to tell the listener to quit.
+                print "Terminating qt listener process"
                 return
             logger = logging.getLogger(record.name)
             logger.handle(record) # No level or filter logic applied - just do it!
