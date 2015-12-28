@@ -191,8 +191,8 @@ def main():
     from PySide import QtGui, QtCore
     from pysideapp import views
     app = QtGui.QApplication([])
-    my_form = views.BasicWindow()
     views.log = root
+    my_form = views.BasicWindow()
 
     # Assign an explicitly defined queue to the view object, which expects that
     # "log" variable to be accessible
