@@ -46,6 +46,7 @@ Copyright (C) 2010 Vinay Sajip. All Rights Reserved.
 import logging
 import logging.handlers
 import multiprocessing
+import platform
 
 # Next two import lines for this demo only
 from random import choice, random
@@ -54,7 +55,7 @@ import time
 class QueueHandler(logging.Handler):
     """
     This is a logging handler which sends events to a multiprocessing queue.
-    
+
     The plan is to add it to Python 3.2, but this can be copy pasted into
     user code for use with earlier Python versions.
     """
@@ -65,7 +66,7 @@ class QueueHandler(logging.Handler):
         """
         logging.Handler.__init__(self)
         self.queue = queue
-        
+
     def emit(self, record):
         """
         Emit a record.
@@ -109,7 +110,7 @@ def listener_configurer():
     root.addHandler(strm)
 
 # This is the listener process top-level loop: wait for logging events
-# (LogRecords)on the queue and handle them, quit when you get a None for a 
+# (LogRecords)on the queue and handle them, quit when you get a None for a
 # LogRecord.
 #def listener_process(queue, configurer, update_function):
 def listener_process(queue, configurer):
@@ -178,12 +179,15 @@ def main():
     queue = multiprocessing.Queue(-1)
 
     # Remember you have to add a local log configurator for each
-    # process, including this the parent process
-    top_handler = QueueHandler(queue) 
-    root = logging.getLogger()
-    root.addHandler(top_handler)
-    root.setLevel(logging.DEBUG)
-    root.debug("Post top level configurer")
+    # process, including this the parent process, but only on windows, as linux
+    # seems to do this automatically. If you enable this on linux you will get
+    # double messages at best, or forever looping log messages
+    if "Linux" not in platform.platform():
+        top_handler = QueueHandler(queue)
+        root = logging.getLogger()
+        root.addHandler(top_handler)
+        root.setLevel(logging.DEBUG)
+        root.debug("Post top level configurer")
 
     import sys
     from PySide import QtGui, QtCore
@@ -224,7 +228,7 @@ def main():
     # for a non empty queue, and updates the text control with the
     # current event, after it writes to disk and stdout. The separate
     # processes below write their logging events to the same queue,
-    # which handles the thread safedness. 
+    # which handles the thread safedness.
 
 
 
