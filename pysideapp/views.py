@@ -6,14 +6,24 @@ import datetime
 
 from PySide import QtGui, QtCore
 
-#import logging
-#log = logging.getLogger(__name__)
+import logging
+log = logging.getLogger(__name__)
 
 class BasicWindow(QtGui.QMainWindow):
     """ Provie a bare form layout with basic interactivity.
     """
     def __init__(self, parent=None, in_log_queue=None):
-        #log.debug("Init of %s" % self.__class__.__name__)
+        if in_log_queue != None:
+            import logging
+            self.log = logging.getLogger(__name__)
+            from exmp_four import QueueHandler
+            top_handler = QueueHandler(in_log_queue)
+            self.log.addHandler(top_handler)
+            self.log.setLevel(logging.DEBUG)
+            self.log.debug("At basic window setup queue handler")
+
+
+        log.debug("Init of %s" % self.__class__.__name__)
         super(BasicWindow, self).__init__(parent)
 
         # The main widget. Certain implementations will still create a
@@ -51,7 +61,7 @@ class BasicWindow(QtGui.QMainWindow):
     def change_text(self):
         new_txt = "Button clicked: %s" % datetime.datetime.now()
         self.lbl_info.setText(new_txt)
-        self.log.debug(new_txt)
+        log.debug(new_txt)
         print "post log debug STDOUT: %s" % new_txt
 
     def on_log(self, input_text):

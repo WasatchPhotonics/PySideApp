@@ -149,6 +149,7 @@ def worker_configurer(queue):
     # along with the main process configuration it prints double messages on the
     # sub processes.
     if "Linux" in platform.platform():
+        print "Not generating a worker_configurer because on linux"
         return
     h = QueueHandler(queue) # Just the one handler needed
     root = logging.getLogger()
@@ -181,21 +182,29 @@ def main():
 
     # Remember you have to add a local log configurator for each
     # process, including this the parent process
-    #top_handler = QueueHandler(queue)
-    #root = logging.getLogger()
-    #root.addHandler(top_handler)
-    #root.setLevel(logging.DEBUG)
-    #root.debug("Post top level configurer")
+    top_handler = QueueHandler(queue)
+    root = logging.getLogger()
+    root.addHandler(top_handler)
+    root.setLevel(logging.DEBUG)
+    root.debug("Post top level configurer")
 
     from PySide import QtGui, QtCore
     from pysideapp import views
     app = QtGui.QApplication([])
     my_form = views.BasicWindow()
-    my_form.log = logging.getLogger()
-    top_handler = QueueHandler(queue)
-    my_form.log.addHandler(top_handler)
-    my_form.log.setLevel(logging.DEBUG)
-    my_form.log.debug("Post my_form top level configurer")
+    views.log = root
+
+    # Assign an explicitly defined queue to the view object, which expects that
+    # "log" variable to be accessible
+    #my_form.log = logging.getLogger()
+    #top_handler = QueueHandler(queue)
+    #my_form.log.addHandler(top_handler)
+    #my_form.log.setLevel(logging.DEBUG)
+    #my_form.log.debug("Post my_form top level configurer")
+
+    # Or, pass in the queue at the constructor, and self-add it
+    # Which prints doubles on linux
+    #my_form = views.BasicWindow(in_log_queue=queue)
 
 
     workers = []
