@@ -62,21 +62,22 @@ class SimulateMain(object):
         h.setFormatter(f)
         root.addHandler(h)
 
-        strm = logging.StreamHandler(sys.stdout)
+        strm = logging.StreamHandler(sys.stderr)
         frmt = logging.Formatter("%(asctime)s %(name)s - %(levelname)s %(message)s")
         strm.setFormatter(frmt)
         root.addHandler(strm)
 
         # py.test capturelog will not see this and any other message printed
         # from the sub processes
-        root.log(logging.INFO, "Setup listener process")
+        print "Creation of listener configurer"
+        root.log(logging.INFO, "LOGIT Setup listener configurer")
 
     def listener_process(self, queue, configurer):
         configurer()
 
         # This will not appear in the stdout, as you have to add it to the queue
         # handler, which for this demo is only done int he worker process
-        print("Setup listener process")
+        print("PRINT Setup listener process")
 
         while True:
             try:

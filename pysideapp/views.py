@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 class BasicWindow(QtGui.QMainWindow):
     """ Provie a bare form layout with basic interactivity.
     """
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, in_log_queue=None):
         log.debug("Init of %s" % self.__class__.__name__)
         super(BasicWindow, self).__init__(parent)
 
@@ -51,13 +51,13 @@ class BasicWindow(QtGui.QMainWindow):
     def change_text(self):
         new_txt = "Button clicked: %s" % datetime.datetime.now()
         self.lbl_info.setText(new_txt)
-        print "STDOUT: %s" % new_txt
         log.debug(new_txt)
+        print "post log debug STDOUT: %s" % new_txt
 
     def on_log(self, input_text):
         """ Append the new text to the logging text edit control.
         """
-        print "In on log with [%s]" % input_text
+        #print "In on log with [%s]" % input_text
         self.txt_log.append(input_text)
 
 class QTLogHandler(logging.Handler):
@@ -76,7 +76,7 @@ class QTLogHandler(logging.Handler):
         #rec_str = str(record.asctime) + " " + str(record.levelname) \
                   #+ " " + str(record.message)
         rec_str = "%s %s" % (log_record.name, log_record.msg)
-        #print "Set rec_str to: %s" % rec_str
+        print "Set rec_str to: %s" % rec_str
         self.lts.log_update.emit(rec_str)
 
 class LogToSignal(QtCore.QObject):
