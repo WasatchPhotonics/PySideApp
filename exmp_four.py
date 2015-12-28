@@ -51,6 +51,7 @@ import multiprocessing
 from random import choice, random
 import time
 import sys
+import platform
 
 class QueueHandler(logging.Handler):
     """
@@ -143,6 +144,12 @@ MESSAGES = [
 # Note that on Windows you can't rely on fork semantics, so each process
 # will run the logging configuration code when it starts.
 def worker_configurer(queue):
+
+    # Do you just disable the worker configuration on linux? If you leave it in
+    # along with the main process configuration it prints double messages on the
+    # sub processes.
+    if "Linux" in platform.platform():
+        return
     h = QueueHandler(queue) # Just the one handler needed
     root = logging.getLogger()
     root.addHandler(h)
@@ -174,17 +181,21 @@ def main():
 
     # Remember you have to add a local log configurator for each
     # process, including this the parent process
-    top_handler = QueueHandler(queue)
-    root = logging.getLogger()
-    root.addHandler(top_handler)
-    root.setLevel(logging.DEBUG)
-    root.debug("Post top level configurer")
+    #top_handler = QueueHandler(queue)
+    #root = logging.getLogger()
+    #root.addHandler(top_handler)
+    #root.setLevel(logging.DEBUG)
+    #root.debug("Post top level configurer")
 
     from PySide import QtGui, QtCore
     from pysideapp import views
     app = QtGui.QApplication([])
     my_form = views.BasicWindow()
     my_form.log = logging.getLogger()
+    top_handler = QueueHandler(queue)
+    my_form.log.addHandler(top_handler)
+    my_form.log.setLevel(logging.DEBUG)
+    my_form.log.debug("Post my_form top level configurer")
 
 
     workers = []
