@@ -46,11 +46,11 @@ Copyright (C) 2010 Vinay Sajip. All Rights Reserved.
 import logging
 import logging.handlers
 import multiprocessing
-import platform
 
 # Next two import lines for this demo only
 from random import choice, random
 import time
+import sys
 
 class QueueHandler(logging.Handler):
     """
@@ -97,13 +97,11 @@ class QueueHandler(logging.Handler):
 # The size of the rotated files is made small so you can see the results easily.
 def listener_configurer():
     root = logging.getLogger()
-    #h = logging.handlers.RotatingFileHandler('/tmp/mptest.log', 'a', 300, 10)
     h = logging.handlers.RotatingFileHandler('mptest.log', 'w')
     f = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
     h.setFormatter(f)
     root.addHandler(h)
 
-    import sys
     strm = logging.StreamHandler(sys.stdout)
     frmt = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
     strm.setFormatter(frmt)
@@ -112,10 +110,8 @@ def listener_configurer():
 # This is the listener process top-level loop: wait for logging events
 # (LogRecords)on the queue and handle them, quit when you get a None for a
 # LogRecord.
-#def listener_process(queue, configurer, update_function):
 def listener_process(queue, configurer):
     configurer()
-    print "Post configurerer listenere"
     while True:
         try:
             record = queue.get()
@@ -123,11 +119,6 @@ def listener_process(queue, configurer):
                 break
             logger = logging.getLogger(record.name)
             logger.handle(record) # No level or filter logic applied - just do it!
-            #print "Actual log process for %s" % record.msg
-
-            # Can't do this - not picklable
-            #update_function(record.msg)
-
         except (KeyboardInterrupt, SystemExit):
             raise
         except:
@@ -170,76 +161,30 @@ def worker_process(queue, configurer):
         level = choice(LEVELS)
         message = choice(MESSAGES)
         logger.log(level, message)
-    print('Worker process: Worker finished: %s' % name)
+    print('Worker finished: %s' % name)
 
 # Here's where the demo gets orchestrated. Create the queue, create and start
 # the listener, create ten workers and start them, wait for them to finish,
 # then send a None to the queue to tell the listener to finish.
 def main():
     queue = multiprocessing.Queue(-1)
-
-    # Remember you have to add a local log configurator for each
-    # process, including this the parent process, but only on windows, as linux
-    # seems to do this automatically. If you enable this on linux you will get
-    # double messages at best, or forever looping log messages
-    if "Linux" not in platform.platform():
-        top_handler = QueueHandler(queue)
-        root = logging.getLogger()
-        root.addHandler(top_handler)
-        root.setLevel(logging.DEBUG)
-        root.debug("Post top level configurer")
-    else:
-        print "Adding stderr/stdout logger for linux "
-        import sys
-        root = logging.getLogger()
-        strm = logging.StreamHandler(sys.stderr)
-        frmt = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
-        strm.setFormatter(frmt)
-        root.addHandler(strm)
-
-
-
-    import sys
-    from PySide import QtGui, QtCore
-    from pysideapp import views
-    app = QtGui.QApplication([])
-    my_form = views.BasicWindow()
-
-    # Now before starting the listener process, create the qt window,
-    # and pass in the control to be updated. Which you can't do, because
-    # it can't be pickled.
-    #listener = multiprocessing.Process(target=listener_process,
-                                       #args=(queue, listener_configurer,
-                                             #upd_func))
-
-    # So try and go the other way - down in the created form, add a
-    # handling routine to the existing listener that will include a
-    # update to the text control box. The best you could do there is
-    # continuously read off the queue, add to the text control, then put
-    # it back on the queue, but you will lose entries that make it to
-    # the main process first.
-
-    # You have to have the qt interface and the listener process in the
-    # same process. So instead of creating a separate process, use the
-    # qt timer interface to process the queue at every timeout. Or move
-    # the qt app creation into the listener process function.
-
-    # But you have to keep the qapplication exec and the listener stuff
-    # in the same process, so try and push it all down into the qt app
-
-    # Original
     listener = multiprocessing.Process(target=listener_process,
                                        args=(queue, listener_configurer))
     listener.start()
 
-    # Qt driven loop listener
-    #my_form.qt_log_setup(queue)
-    # What this creates is a qt app with a zero timeout loop that looks
-    # for a non empty queue, and updates the text control with the
-    # current event, after it writes to disk and stdout. The separate
-    # processes below write their logging events to the same queue,
-    # which handles the thread safedness.
+    # Remember you have to add a local log configurator for each
+    # process, including this the parent process
+    top_handler = QueueHandler(queue)
+    root = logging.getLogger()
+    root.addHandler(top_handler)
+    root.setLevel(logging.DEBUG)
+    root.debug("Post top level configurer")
 
+    from PySide import QtGui, QtCore
+    from pysideapp import views
+    app = QtGui.QApplication([])
+    my_form = views.BasicWindow()
+    my_form.log = logging.getLogger()
 
 
     workers = []
@@ -249,15 +194,12 @@ def main():
         workers.append(worker)
         worker.start()
 
-    # Stop all the queues
+    # Issue Nones to close the working threads
     #for w in workers:
-    #    w.join()
+        #w.join()
     #queue.put_nowait(None)
     #listener.join()
 
-
     sys.exit(app.exec_())
-
-
 if __name__ == '__main__':
     main()
