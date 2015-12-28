@@ -57,7 +57,7 @@ class BasicWindow(QtGui.QMainWindow):
 
         self.button.clicked.connect(self.change_text)
 
-        #self.setup_signals()
+        self.setup_signals()
 
         self.setGeometry(30, 30, 400, 400)
         self.show()

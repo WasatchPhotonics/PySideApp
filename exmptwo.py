@@ -179,11 +179,11 @@ def main():
 
     # Remember you have to add a local log configurator for each
     # process, including this the parent process
-    #top_handler = QueueHandler(queue) 
-    #root = logging.getLogger()
-    #root.addHandler(top_handler)
-    #root.setLevel(logging.DEBUG)
-    #root.debug("Post top level configurer")
+    top_handler = QueueHandler(queue) 
+    root = logging.getLogger()
+    root.addHandler(top_handler)
+    root.setLevel(logging.DEBUG)
+    root.debug("Post top level configurer")
 
     import sys
     from PySide import QtGui, QtCore
@@ -214,12 +214,12 @@ def main():
     # in the same process, so try and push it all down into the qt app
 
     # Original
-    #listener = multiprocessing.Process(target=listener_process,
-                                       #args=(queue, listener_configurer))
-    #listener.start()
+    listener = multiprocessing.Process(target=listener_process,
+                                       args=(queue, listener_configurer))
+    listener.start()
 
     # Qt driven loop listener
-    my_form.qt_log_setup(queue)
+    #my_form.qt_log_setup(queue)
     # What this creates is a qt app with a zero timeout loop that looks
     # for a non empty queue, and updates the text control with the
     # current event, after it writes to disk and stdout. The separate
