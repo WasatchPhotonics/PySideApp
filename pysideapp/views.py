@@ -47,9 +47,6 @@ class BasicWindow(QtGui.QMainWindow):
 
     def setup_signals(self):
         self.button.clicked.connect(self.change_text)
-        self.qtl_handler = QTLogHandler()
-        log.addHandler(self.qtl_handler)
-        self.qtl_handler.lts.log_update.connect(self.on_log)
 
     def change_text(self):
         new_txt = "Button clicked: %s" % datetime.datetime.now()
@@ -62,28 +59,3 @@ class BasicWindow(QtGui.QMainWindow):
         """
         #print "In on log with [%s]" % input_text
         self.txt_log.append(input_text)
-
-class QTLogHandler(logging.Handler):
-    """ Hook into the python native logging module to catch all lower
-    level logging events and emit a signal to be processed by the qt
-    interface.
-    """
-    def __init__(self):
-        super(QTLogHandler, self).__init__()
-        self.lts = LogToSignal()
-
-    def emit(self, log_record):
-        """ Why is the formatter not applied? Why can't you do
-        log_record.asctime?
-        """
-        #rec_str = str(record.asctime) + " " + str(record.levelname) \
-                  #+ " " + str(record.message)
-        rec_str = "%s %s" % (log_record.name, log_record.msg)
-        print "Set rec_str to: %s" % rec_str
-        self.lts.log_update.emit(rec_str)
-
-class LogToSignal(QtCore.QObject):
-    """ Follows the example documentation to create a QObject based
-    class used to re-emit the log string caught by the handler.
-    """
-    log_update = QtCore.Signal("QString")
