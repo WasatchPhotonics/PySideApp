@@ -15,16 +15,14 @@ from pysideapp import queue_logging
 class TestQueueHandler():
 
     def test_queue_handler_listener_process_exists(self, caplog):
+        # pytest-capturelog does not handle multiprocessing log entries, expect
+        # an empty capturelog
         my_proc = queue_logging.SimulateMain()
         my_proc.create_proc()
         time.sleep(1.0)
-        expect = "Setup listener process"
-        actual = caplog.text()
-        print "Full caplog: [%s]" % actual
-        assert expect in actual
 
-        # This test failure is to demonstrate that the caplog capability is not
-        # present for multiprocessing
+        print "Full text: %s" % caplog.text()
+        assert caplog.text() == ""
 
     def test_reread_log_from_listener_processes(self):
         # Do the same test as above, but slurp in the contents of the log file

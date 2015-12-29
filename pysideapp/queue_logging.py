@@ -8,7 +8,7 @@ import logging.handlers
 import multiprocessing
 
 
-log = logging.getLogger(__name__)
+#log = logging.getLogger(__name__)
 
 class SimulateMain(object):
     def __init__(self):
@@ -18,11 +18,19 @@ class SimulateMain(object):
     def create_proc(self):
 
         queue = multiprocessing.Queue(-1)
+
         listener = multiprocessing.Process(target=self.listener_process,
                                         args=(queue, self.listener_configurer))
         listener.start()
+
+        #h = QueueHandler(queue)
+        #root = logging.getLogger()
+        #root.addHandler(h)
+        #root.setLevel(logging.DEBUG)
+        #root.debug("In create proc")
+
         workers = []
-        for i in range(3):
+        for i in range(1):
             worker = multiprocessing.Process(target=self.worker_process,
                                         args=(queue, self.worker_configurer))
             workers.append(worker)
@@ -33,9 +41,9 @@ class SimulateMain(object):
         listener.join()
 
     def worker_configurer(self, queue):
-        h = QueueHandler(queue) # Just the one handler needed
+        queue_h = QueueHandler(queue) # Just the one handler needed
         root = logging.getLogger()
-        root.addHandler(h)
+        root.addHandler(queue_h)
         root.setLevel(logging.DEBUG) # send all messages, for demo; no other level or filter logic applied.
 
     def worker_process(self, queue, configurer):
@@ -43,10 +51,12 @@ class SimulateMain(object):
         name = multiprocessing.current_process().name
         print('Worker started: %s' % name)
 
-        logger = logging.getLogger(__name__)
-        logger.log(logging.INFO, "inside worker process %s", name)
+        #logger = logging.getLogger(__name__)
+        #logger.log(logging.INFO, "inside worker process %s", name)
         for i in range(10):
             time.sleep(0.1)
+            root = logging.getLogger()
+            root.debug("Inside a worker process")
             #logger = logging.getLogger(choice(LOGGERS))
             #level = choice(LEVELS)
             #message = choice(MESSAGES)
@@ -56,21 +66,14 @@ class SimulateMain(object):
 
     def listener_configurer(self):
         root = logging.getLogger()
-        #h = logging.handlers.RotatingFileHandler('/tmp/mptest.log', 'a', 300, 10)
-        h = logging.FileHandler("mptest.log", mode="w")
-        f = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
-        h.setFormatter(f)
-        root.addHandler(h)
+        file_h = logging.FileHandler("mptest.log", mode="w")
+        frmt = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
+        file_h.setFormatter(frmt)
+        root.addHandler(file_h)
 
-        strm = logging.StreamHandler(sys.stderr)
-        frmt = logging.Formatter("%(asctime)s %(name)s - %(levelname)s %(message)s")
-        strm.setFormatter(frmt)
-        root.addHandler(strm)
-
-        # py.test capturelog will not see this and any other message printed
-        # from the sub processes
-        print "Creation of listener configurer"
-        root.log(logging.INFO, "LOGIT Setup listener configurer")
+        strm_h = logging.StreamHandler(sys.stdout)
+        strm_h.setFormatter(frmt)
+        root.addHandler(strm_h)
 
     def listener_process(self, queue, configurer):
         configurer()

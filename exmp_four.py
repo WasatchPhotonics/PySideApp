@@ -146,8 +146,8 @@ MESSAGES = [
 def worker_configurer(queue):
 
     # Do you just disable the worker configuration on linux? If you leave it in
-    # along with the main process configuration it prints double messages on the
-    # sub processes.
+    # along with the main process log configuration it prints double messages on
+    # the sub processes.
     if "Linux" in platform.platform():
         print "Not generating a worker_configurer because on linux"
         return
