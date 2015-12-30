@@ -100,7 +100,7 @@ class MainLogger(object):
         h.setFormatter(frmt)
         root.addHandler(h)
 
-        strm = logging.StreamHandler(sys.stdout)
+        strm = logging.StreamHandler(sys.stderr)
         strm.setFormatter(frmt)
         root.addHandler(strm)
 
