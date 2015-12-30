@@ -4,7 +4,7 @@ current timestamp. Used to demonstrate pytest-qt qtbot button clicking.
 """
 import datetime
 
-from PySide import QtGui, QtCore
+from PySide import QtGui
 
 import logging
 log = logging.getLogger(__name__)
@@ -27,6 +27,11 @@ class BasicWindow(QtGui.QMainWindow):
         self.main_widget.setLayout(self.vbox)
         self.central_widget.addWidget(self.main_widget)
 
+        self.lbl_logo = QtGui.QLabel()
+        logo_filename = "pysideapp/assets/images/wp_logo.png"
+        self.lbl_logo.setPixmap(QtGui.QPixmap(logo_filename))
+        self.vbox.addWidget(self.lbl_logo)
+
         self.lbl_info = QtGui.QLabel("PySideApp Default")
         self.vbox.addWidget(self.lbl_info)
 
@@ -36,14 +41,10 @@ class BasicWindow(QtGui.QMainWindow):
         self.txt_log = QtGui.QTextEdit("Log text area")
         self.vbox.addWidget(self.txt_log)
 
-        self.deep_log = QtGui.QTextEdit("deep log")
-        self.vbox.addWidget(self.deep_log)
-
         self.setup_signals()
 
         self.setGeometry(30, 30, 400, 400)
         self.show()
-
 
     def setup_signals(self):
         self.button.clicked.connect(self.change_text)
@@ -53,9 +54,3 @@ class BasicWindow(QtGui.QMainWindow):
         self.lbl_info.setText(new_txt)
         log.debug(new_txt)
         print "post log debug STDOUT: %s" % new_txt
-
-    def on_log(self, input_text):
-        """ Append the new text to the logging text edit control.
-        """
-        #print "In on log with [%s]" % input_text
-        self.txt_log.append(input_text)
