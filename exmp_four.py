@@ -52,6 +52,7 @@ from random import choice, random
 import time
 import sys
 import platform
+from multiprocessing import Process, freeze_support
 
 class QueueHandler(logging.Handler):
     """
@@ -84,6 +85,33 @@ class QueueHandler(logging.Handler):
             raise
         except:
             self.handleError(record)
+
+def get_location():
+    """ Determine the location to store the log file. Current directory
+    on Linux, or %PROGRAMDATA% on windows - usually c:\ProgramData\
+    """
+    log_dir = "./"
+
+    if "Linux" in platform.platform():
+        return log_dir
+
+    try:
+        import ctypes
+        from ctypes import wintypes, windll
+        CSIDL_COMMON_APPDATA = 35
+        _SHGetFolderPath = windll.shell32.SHGetFolderPathW
+        _SHGetFolderPath.argtypes = [wintypes.HWND,
+                                    ctypes.c_int,
+                                    wintypes.HANDLE,
+                                    wintypes.DWORD, wintypes.LPCWSTR]
+
+        path_buf = wintypes.create_unicode_buffer(wintypes.MAX_PATH)
+        result = _SHGetFolderPath(0, CSIDL_COMMON_APPDATA, 0, 0, path_buf)
+        log_dir = path_buf.value
+    except:
+        log.exception("Problem assigning log directory")
+
+    return(log_dir)
 #
 # Because you'll want to define the logging configurations for listener and workers, the
 # listener and worker process functions take a configurer parameter which is a callable
@@ -97,8 +125,10 @@ class QueueHandler(logging.Handler):
 #
 # The size of the rotated files is made small so you can see the results easily.
 def listener_configurer():
+    log_dir = get_location()
+    log_dir += "/%s_log.txt" % "mptest"
     root = logging.getLogger()
-    h = logging.handlers.RotatingFileHandler('mptest.log', 'w')
+    h = logging.handlers.RotatingFileHandler(log_dir, 'w')
     f = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
     h.setFormatter(f)
     root.addHandler(h)
@@ -222,4 +252,5 @@ def main():
 
     sys.exit(app.exec_())
 if __name__ == '__main__':
+    freeze_support()
     main()
