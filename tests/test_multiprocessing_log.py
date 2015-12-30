@@ -11,6 +11,10 @@ test completion.
 
 import os
 import time
+import logging
+import multiprocessing
+
+from pysideapp import app_logging
 
 FILENAME = "mptest_log.txt"
 
@@ -18,7 +22,6 @@ class TestLogFile():
     def test_log_file_is_created(self):
         assert self.delete_log_file_if_exists() == True
 
-        from pysideapp import app_logging
         main_logger = app_logging.MainLogger()
         main_logger.close()
 
@@ -30,7 +33,6 @@ class TestLogFile():
     def test_log_file_has_entries(self):
         assert self.delete_log_file_if_exists() == True
 
-        from pysideapp import app_logging
         main_logger = app_logging.MainLogger()
         main_logger.close()
 
@@ -40,12 +42,76 @@ class TestLogFile():
 
         assert "Top level log configuration" in log_text
 
+
     def test_log_capture_fixture_can_read_top_level_log(self, caplog):
-        from pysideapp import app_logging
         main_logger = app_logging.MainLogger()
         main_logger.close()
 
         assert "Top level log configuration" in caplog.text()
+
+
+    def test_log_capture_fixture_does_not_see_sub_process_entries(self, caplog):
+        """ This test is about documenting the expected behavior. It took days
+        of effort to determine that the logging is behaving as expected, but the
+        pytest capture fixtures does not seem to be able to record those values.
+        """
+        main_logger = app_logging.MainLogger()
+
+        log_queue = main_logger.log_queue
+        sub_proc = multiprocessing.Process(target=self.worker_process,
+                                           args=(log_queue,))
+        sub_proc.start()
+
+        time.sleep(0.1) # make sure the process has enough time to emit
+
+        main_logger.close()
+
+        time.sleep(0.5) # required to let file creation happen
+
+        log_text = caplog.text()
+
+        assert "Top level log configuration" in log_text
+        assert "Sub process setup configuration" not in log_text
+        assert "Sub process debug log info" not in log_text
+
+    def test_log_file_has_sub_process_entries(self):
+        """ This test documents the alternative: slurp the log results back in
+        from the log file and then do the text matches.
+        """
+        assert self.delete_log_file_if_exists() == True
+
+        main_logger = app_logging.MainLogger()
+
+        log_queue = main_logger.log_queue
+        sub_proc = multiprocessing.Process(target=self.worker_process,
+                                           args=(log_queue,))
+        sub_proc.start()
+
+        time.sleep(0.1) # make sure the process has enough time to emit
+
+        main_logger.close()
+
+        time.sleep(0.5) # required to let file creation happen
+
+        log_text = self.get_text_from_log()
+
+        assert "Top level log configuration" in log_text
+        assert "Sub process setup configuration" in log_text
+        assert "Sub process debug log info" in log_text
+
+
+    def worker_process(self, log_queue):
+        """ Simple multi-processing target that uses the helper log
+        configuration in app_logging, and logs the current process name and an
+        expected string.
+        """
+        app_logging.process_log_configure(log_queue)
+        root_log = logging.getLogger()
+
+        name = multiprocessing.current_process().name
+        #print('Worker started: %s' % name)
+        root_log.debug("%s Sub process debug log info", name)
+        #print('Worker finished: %s' % name)
 
 
 

@@ -20,6 +20,23 @@ def get_location():
     log_dir = "./"
     return(log_dir)
 
+def process_log_configure(log_queue):
+    """ Called at the beginning of every process, including the main process.
+    Adds a queue handler object to the root logger to be processed in the main
+    listener.
+
+    Only on Windows though. Apparently Linux will pass the root logger amongst
+    processes as expected, so if you add another queue handler you will get
+    double log prints.
+    """
+    root_log = logging.getLogger()
+    if "Windows" in platform.platform():
+        queue_handler = QueueHandler(log_queue)
+        root_log.addHandler(queue_handler)
+        root_log.setLevel(logging.DEBUG)
+
+    root_log.debug("Sub process setup configuration")
+
 class QueueHandler(logging.Handler):
     """
     Copied verbatim from PlumberJack (see above)
@@ -29,12 +46,12 @@ class QueueHandler(logging.Handler):
     user code for use with earlier Python versions.
     """
 
-    def __init__(self, queue):
+    def __init__(self, log_queue):
         """
         Initialise an instance, using the passed queue.
         """
         logging.Handler.__init__(self)
-        self.queue = queue
+        self.log_queue = log_queue
 
     def emit(self, record):
         """
@@ -47,7 +64,7 @@ class QueueHandler(logging.Handler):
             if ei:
                 dummy = self.format(record) # just to get traceback text into record.exc_text
                 record.exc_info = None  # not needed any more
-            self.queue.put_nowait(record)
+            self.log_queue.put_nowait(record)
         except (KeyboardInterrupt, SystemExit):
             raise
         except:
@@ -56,18 +73,18 @@ class QueueHandler(logging.Handler):
 
 class MainLogger(object):
     def __init__(self):
-        self.queue = multiprocessing.Queue(-1)
+        self.log_queue = multiprocessing.Queue(-1)
         self.listener = multiprocessing.Process(target=self.listener_process,
-                                        args=(self.queue, self.listener_configurer))
+                                        args=(self.log_queue, self.listener_configurer))
         self.listener.start()
 
         # Remember you have to add a local log configurator for each
         # process, including this, the parent process
-        top_handler = QueueHandler(self.queue)
-        root = logging.getLogger()
-        root.addHandler(top_handler)
-        root.setLevel(logging.DEBUG)
-        root.debug("Top level log configuration")
+        top_handler = QueueHandler(self.log_queue)
+        root_log = logging.getLogger()
+        root_log.addHandler(top_handler)
+        root_log.setLevel(logging.DEBUG)
+        root_log.debug("Top level log configuration")
 
     def listener_configurer(self):
         """ Setup file handler and command window stream handlers. Every log
@@ -90,11 +107,11 @@ class MainLogger(object):
     # This is the listener process top-level loop: wait for logging events
     # (LogRecords)on the queue and handle them, quit when you get a None for a
     # LogRecord.
-    def listener_process(self, queue, configurer):
+    def listener_process(self, log_queue, configurer):
         configurer()
         while True:
             try:
-                record = queue.get()
+                record = log_queue.get()
                 if record is None: # We send this as a sentinel to tell the listener to quit.
                     break
                 logger = logging.getLogger(record.name)
@@ -110,4 +127,4 @@ class MainLogger(object):
         """ Wrapper to add a None poison pill to the listener process queue to
         ensure it exits.
         """
-        self.queue.put_nowait(None)
+        self.log_queue.put_nowait(None)
