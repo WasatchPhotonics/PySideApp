@@ -1,40 +1,28 @@
-import logging
-import logging.handlers
-import multiprocessing
+""" PySideApp custom logging setup and helper functions. This is based heavily on
+http://plumberjack.blogspot.com/2010/09/using-logging-with-multiprocessing.html
 
+The general approach is that the control portion of the application instantiates
+a MainLogger object below. This will create a separate process that looks for
+log events on a queue. Each process of the application then registers a queue
+handler, and writes its log events. The MainLogger loop will collect and write
+these log events to file and any any other defined logging location.
+
+"""
 import sys
+import logging
 import platform
-from multiprocessing import Process, freeze_support
+import multiprocessing
 
 def get_location():
     """ Determine the location to store the log file. Current directory
     on Linux, or %PROGRAMDATA% on windows - usually c:\ProgramData\
     """
     log_dir = "./"
-
-    if "Linux" in platform.platform():
-        return log_dir
-
-    try:
-        import ctypes
-        from ctypes import wintypes, windll
-        CSIDL_COMMON_APPDATA = 35
-        _SHGetFolderPath = windll.shell32.SHGetFolderPathW
-        _SHGetFolderPath.argtypes = [wintypes.HWND,
-                                    ctypes.c_int,
-                                    wintypes.HANDLE,
-                                    wintypes.DWORD, wintypes.LPCWSTR]
-
-        path_buf = wintypes.create_unicode_buffer(wintypes.MAX_PATH)
-        result = _SHGetFolderPath(0, CSIDL_COMMON_APPDATA, 0, 0, path_buf)
-        log_dir = path_buf.value
-    except:
-        log.exception("Problem assigning log directory")
-
     return(log_dir)
 
 class QueueHandler(logging.Handler):
     """
+    Copied verbatim from PlumberJack (see above)
     This is a logging handler which sends events to a multiprocessing queue.
 
     The plan is to add it to Python 3.2, but this can be copy pasted into
@@ -74,24 +62,28 @@ class MainLogger(object):
         self.listener.start()
 
         # Remember you have to add a local log configurator for each
-        # process, including this the parent process
+        # process, including this, the parent process
         top_handler = QueueHandler(self.queue)
         root = logging.getLogger()
         root.addHandler(top_handler)
         root.setLevel(logging.DEBUG)
-        root.debug("Post top level configurer")
+        root.debug("Top level log configuration")
 
     def listener_configurer(self):
+        """ Setup file handler and command window stream handlers. Every log
+        message received on the queue handler will use these log configurers.
+        """
+
         log_dir = get_location()
         log_dir += "/%s_log.txt" % "mptest"
+
         root = logging.getLogger()
-        h = logging.handlers.RotatingFileHandler(log_dir, 'w')
-        f = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
-        h.setFormatter(f)
+        h = logging.FileHandler(log_dir, 'w') # Overwrite previous run
+        frmt = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
+        h.setFormatter(frmt)
         root.addHandler(h)
 
         strm = logging.StreamHandler(sys.stdout)
-        frmt = logging.Formatter('%(asctime)s %(processName)-10s %(name)s %(levelname)-8s %(message)s')
         strm.setFormatter(frmt)
         root.addHandler(strm)
 
@@ -115,4 +107,7 @@ class MainLogger(object):
                 traceback.print_exc(file=sys.stderr)
 
     def close(self):
+        """ Wrapper to add a None poison pill to the listener process queue to
+        ensure it exits.
+        """
         self.queue.put_nowait(None)
