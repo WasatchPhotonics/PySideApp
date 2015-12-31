@@ -7,6 +7,8 @@ import time
 import logging
 import multiprocessing
 
+from pysideapp import applog
+
 log = logging.getLogger(__name__)
 
 class SimulateSpectra(object):
@@ -40,8 +42,9 @@ class LongPollingSimulateSpectra(object):
         self.command_queue.put(None)
 
     def continuous_poll(self, log_queue, command_queue, response_queue):
-        self.device = SimulateSpectra()
         applog.process_log_configure(log_queue)
+
+        self.device = SimulateSpectra()
         while True:
             try:
                 record = command_queue.get()
