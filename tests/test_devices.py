@@ -55,9 +55,11 @@ class TestBasicDevice:
         pytest run will hang on cleanup. That is, all the tests will be run,
         assertions processed, and it just hangs at the end of the run.
         """
+        time.sleep(1.0) # make sure the process has enough time to emit
         device.close()
         time.sleep(1.0) # make sure the process has enough time to emit
 
+        time.sleep(0.5) # required to let file creation happen
         main_logger.close()
         time.sleep(0.5) # required to let file creation happen
 
