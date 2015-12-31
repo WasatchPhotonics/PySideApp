@@ -41,7 +41,6 @@ class TestControl:
 
         app_control = control.Controller(main_logger.log_queue)
         self.visualization_wait(app_control.form, qtbot)
-        time.sleep(1.0)
 
         app_control.close()
         main_logger.close()
