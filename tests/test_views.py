@@ -1,4 +1,4 @@
-""" Provide a set of tests cases to demonstrate a basic application that meets
+""" Provide a set of tests cases to demonstrate a basic gui that meets
 wasatch needs. This includes menu bar, buttons, and text controls. Verify that
 logging from the views with default setup is available to the capturelog
 fixture.
