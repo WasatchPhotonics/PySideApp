@@ -40,11 +40,19 @@ class LongPollingSimulateSpectra(object):
         self.poller.start()
 
     def close(self):
+        """ Add the poison pill to the command queue.
+        """
         self.command_queue.put(None)
 
     def continuous_poll(self, log_queue, command_queue, response_queue):
+        """ Auto-acquire new readings from the simulated device. First setup the
+        log queue handler. While waiting forever for the None poison pill on the
+        command queue, continuously add 'acquire' commands and post the results
+        on the response queue.
+        """
+
         applog.process_log_configure(log_queue)
-        print "Continuosu poll setup"
+
         self.device = SimulateSpectra()
 
         # Read forever until the None poison pill is received
@@ -68,10 +76,9 @@ class LongPollingSimulateSpectra(object):
                 traceback.print_exc(file=sys.stderr)
 
     def read(self):
-        """
-        Don't use if queue.empty() for flow control on python 2.7 on
-        windows, as it will hang. Use the catch of the queue empty
-        exception as shown below instead.
+        """ Don't use if queue.empty() for flow control on python 2.7 on
+        windows, as it will hang. Use the catch of the queue empty exception as
+        shown below instead.
         """
         result = None
 
