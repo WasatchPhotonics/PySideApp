@@ -34,6 +34,9 @@ class LongPollingSimulateSpectra(object):
         self.response_queue = multiprocessing.Queue()
         self.command_queue = multiprocessing.Queue()
 
+        self.acquire_sent = False # Wait for an acquire to complete
+        self.send_acquire()
+
         args = (log_queue, self.command_queue, self.response_queue)
         self.poller = multiprocessing.Process(target=self.continuous_poll,
                                               args=args)
@@ -43,6 +46,7 @@ class LongPollingSimulateSpectra(object):
         """ Add the poison pill to the command queue.
         """
         self.command_queue.put(None)
+        self.poller.join()
 
     def continuous_poll(self, log_queue, command_queue, response_queue):
         """ Auto-acquire new readings from the simulated device. First setup the
@@ -57,17 +61,16 @@ class LongPollingSimulateSpectra(object):
 
         # Read forever until the None poison pill is received
         while True:
-            command_queue.put("Acquire")
             try:
                 record = command_queue.get()
                 if record is None:
                     log.debug("Exit command queue")
                     break
 
-                time.sleep(0.2)
+                time.sleep(0.1)
                 data = self.device.read()
-                self.response_queue.put(data)
                 log.debug("Collected data in continuous poll")
+                response_queue.put(data)
             except (KeyboardInterrupt, SystemExit):
                 raise
             except:
@@ -80,11 +83,29 @@ class LongPollingSimulateSpectra(object):
         windows, as it will hang. Use the catch of the queue empty exception as
         shown below instead.
         """
-        result = None
 
+        self.send_acquire()
+
+        result = None
         try:
             result = self.response_queue.get_nowait()
+            #log.debug("Successful read: %s", result)
+            self.acquire_sent = False
         except Queue.Empty:
             pass
 
         return result
+
+
+    def send_acquire(self):
+        """ Only send one acquire onto the control queue at a time.  Requires
+        that the removal of the data from the data queue resets the acquire_sent
+        parameter. This is done after a succesful de-queuing in the read
+        function.
+        """
+        if self.acquire_sent:
+            return
+
+        log.debug("Send acquire")
+        self.command_queue.put("ACQUIRE")
+        self.acquire_sent = True

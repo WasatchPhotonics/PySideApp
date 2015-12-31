@@ -77,6 +77,8 @@ class TestBasicDevice:
         device = devices.LongPollingSimulateSpectra(log_queue)
         result = device.read()
         while result is None:
+            time.sleep(0.2)
+            print "Read: %s" % result
             result = device.read()
 
         assert len(result) == 1024

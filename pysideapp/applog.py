@@ -168,3 +168,4 @@ class MainLogger(object):
         ensure it exits.
         """
         self.log_queue.put_nowait(None)
+        self.listener.join()
