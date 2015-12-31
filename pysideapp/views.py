@@ -38,8 +38,8 @@ class BasicWindow(QtGui.QMainWindow):
         self.button = QtGui.QPushButton("Change Text")
         self.vbox.addWidget(self.button)
 
-        self.txt_log = QtGui.QTextEdit("Log text area")
-        self.vbox.addWidget(self.txt_log)
+        self.txt_box = QtGui.QTextEdit("Event text area")
+        self.vbox.addWidget(self.txt_box)
 
         self.setup_signals()
 
