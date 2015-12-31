@@ -12,7 +12,11 @@ from pysideapp import applog
 
 class TestControl:
     def test_control_logs_visible_to_caplog(self, caplog, qtbot):
-        app_control = control.Controller()
+        main_logger = applog.MainLogger()
+
+        app_control = control.Controller(main_logger.log_queue)
+        app_control.close()
+        main_logger.close()
         assert "Control startup" in caplog.text()
 
     def test_view_logs_visible_to_caplog(self, caplog, qtbot):
