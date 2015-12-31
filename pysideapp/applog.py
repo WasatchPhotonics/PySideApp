@@ -8,10 +8,13 @@ handler, and writes its log events. The MainLogger loop will collect and write
 these log events to file and any any other defined logging location.
 
 """
+import os
 import sys
 import logging
 import platform
 import multiprocessing
+
+FILENAME = "mptest_log.txt"
 
 def get_location():
     """ Determine the location to store the log file. Current directory
@@ -36,6 +39,43 @@ def process_log_configure(log_queue):
         root_log.setLevel(logging.DEBUG)
 
     root_log.debug("Sub process setup configuration")
+
+def get_text_from_log():
+    """ Mimic the capturelog style of just slurping the entire log
+    file contents.
+    """
+
+    log_text = ""
+    log_file = open(FILENAME)
+    for line_read in log_file:
+        log_text += line_read
+    return log_text
+
+
+def log_file_created():
+    """ Helper function that returns True if file exists, false otherwise.
+    """
+    filename = FILENAME
+    if os.path.exists(filename):
+        return True
+
+    return False
+
+def delete_log_file_if_exists():
+    """ Remove the specified log file and return True if succesful.
+    """
+    filename = FILENAME
+
+    if os.path.exists(filename):
+        os.remove(filename)
+
+    if os.path.exists(filename):
+        print "Problem deleting: %s", filename
+        return False
+    return True
+
+
+
 
 class QueueHandler(logging.Handler):
     """
