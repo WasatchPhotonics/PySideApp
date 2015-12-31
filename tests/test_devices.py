@@ -20,9 +20,6 @@ class TestBasicDevice:
     def test_direct_device_is_available(self, caplog):
         device = devices.SimulateSpectra()
         result = device.read()
-        while result is None:
-            result = device.read()
-
         assert len(result) == 1024
 
     def test_subprocess_device_logging_is_unavailable(self, caplog):
@@ -58,14 +55,12 @@ class TestBasicDevice:
         pytest run will hang on cleanup. That is, all the tests will be run,
         assertions processed, and it just hangs at the end of the run.
         """
-        #device.close()
-        #time.sleep(1.0) # make sure the process has enough time to emit
-#
-        #main_logger.close()
-        #time.sleep(0.5) # required to let file creation happen
-
         device.close()
+        time.sleep(1.0) # make sure the process has enough time to emit
+
         main_logger.close()
+        time.sleep(0.5) # required to let file creation happen
+
         log_text = applog.get_text_from_log()
 
         assert "SimulateSpectra setup" in log_text

@@ -29,6 +29,7 @@ class Controller(object):
         """ Create a timer for a continuous event loop, trigger the start.
         """
         log.debug("Setup main event loop")
+        self.continue_loop = True
         self.main_timer = QtCore.QTimer()
         self.main_timer.setSingleShot(True)
         self.main_timer.timeout.connect(self.event_loop)
@@ -43,8 +44,10 @@ class Controller(object):
             self.form.txt_box.append("%s spectra read" \
                                      % self.total_spectra)
 
-        self.main_timer.start(0)
+        if self.continue_loop:
+            self.main_timer.start(0)
 
     def close(self):
+        self.continue_loop = False
         self.device.close()
 

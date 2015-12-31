@@ -66,12 +66,9 @@ class TestControl:
         main_logger = applog.MainLogger()
 
         app_control = control.Controller(main_logger.log_queue)
-        txt_box = app_control.form.txt_box
-        assert txt_box.toPlainText() == "Event text area"
-        self.visualization_wait(app_control.form, qtbot)
-        assert "1 spectra read" in txt_box.toPlainText()
 
         self.visualization_wait(app_control.form, qtbot)
+        txt_box = app_control.form.txt_box
         assert "2 spectra read" in txt_box.toPlainText()
 
         app_control.close()
