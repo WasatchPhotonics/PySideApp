@@ -54,9 +54,12 @@ class TestBasicDevice:
 
         log_queue = main_logger.log_queue
         device = devices.LongPollingSimulateSpectra(log_queue)
-        device.close()
 
+        """ NOTE: these sleeps are critical on windows. They do not seem to
+        matter on linux though.
+        """
         time.sleep(1.0) # make sure the process has enough time to emit
+        device.close()
 
         main_logger.close()
 
