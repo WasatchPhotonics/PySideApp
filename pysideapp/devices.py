@@ -4,6 +4,7 @@ multiprocessing wrappers.
 """
 
 import time
+import Queue
 import logging
 import multiprocessing
 
@@ -43,19 +44,22 @@ class LongPollingSimulateSpectra(object):
 
     def continuous_poll(self, log_queue, command_queue, response_queue):
         applog.process_log_configure(log_queue)
-
+        print "Continuosu poll setup"
         self.device = SimulateSpectra()
+
+        # Read forever until the None poison pill is received
         while True:
+            command_queue.put("Acquire")
             try:
                 record = command_queue.get()
-                if record is None: # We send this as a sentinel to tell the listener to quit.
+                if record is None:
                     log.debug("Exit command queue")
                     break
 
+                time.sleep(0.2)
                 data = self.device.read()
                 self.response_queue.put(data)
-                log.debug("In continuous poll")
-                time.sleep(0.1)
+                log.debug("Collected data in continuous poll")
             except (KeyboardInterrupt, SystemExit):
                 raise
             except:
@@ -64,5 +68,16 @@ class LongPollingSimulateSpectra(object):
                 traceback.print_exc(file=sys.stderr)
 
     def read(self):
-        return self.device.read()
+        """
+        Don't use if queue.empty() for flow control on python 2.7 on
+        windows, as it will hang. Use the catch of the queue empty
+        exception as shown below instead.
+        """
+        result = None
 
+        try:
+            result = self.response_queue.get_nowait()
+        except Queue.Empty:
+            pass
+
+        return result
