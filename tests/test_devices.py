@@ -54,10 +54,12 @@ class TestBasicDevice:
         device = devices.LongPollingSimulateSpectra(log_queue)
 
         """ NOTE: these sleeps are critical on windows. They do not seem to
-        matter on linux though.
+        matter on linux though. They have to be in the order listed below or the
+        pytest run will hang on cleanup. That is, all the tests will be run,
+        assertions processed, and it just hangs at the end of the run.
         """
-        time.sleep(1.0) # make sure the process has enough time to emit
         device.close()
+        time.sleep(1.0) # make sure the process has enough time to emit
 
         main_logger.close()
         time.sleep(0.5) # required to let file creation happen
@@ -80,8 +82,8 @@ class TestBasicDevice:
 
         assert len(result) == 1024
 
-        time.sleep(1.0) # make sure the process has enough time to emit
         device.close()
+        time.sleep(1.0) # make sure the process has enough time to emit
 
         # Wait for the exit command queue log messages
         time.sleep(1.0)
