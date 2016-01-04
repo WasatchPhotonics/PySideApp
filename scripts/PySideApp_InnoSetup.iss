@@ -43,7 +43,7 @@ DefaultDirName={pf}\{#MyAppName}
 DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 OutputDir=C:\projects\PySideApp\scripts\windows_installer
-OutputBaseFilename=setup
+OutputBaseFilename={#MyAppName}_setup
 Compression=lzma
 SolidCompression=yes
 
