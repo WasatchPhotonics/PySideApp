@@ -10,9 +10,11 @@ these log events to file and any any other defined logging location.
 """
 import os
 import sys
+import time
 import logging
 import platform
 import multiprocessing
+import Queue
 
 FILENAME = "mptest_log.txt"
 
@@ -150,14 +152,33 @@ class MainLogger(object):
     # LogRecord.
     def listener_process(self, log_queue, configurer):
         configurer()
+
+        # Ugly hack to prevent py.test lockups on windows
+        empty_count = 0
+
         while True:
+            print "listener loop"
+            time.sleep(0.1)
+            if empty_count > 2:
+                print "Break on lots o emptys"
+                break
+
             try:
-                record = log_queue.get()
+                print "Get start"
+                record = log_queue.get(block=True, timeout=0.1)
                 if record is None: # We send this as a sentinel to tell the listener to quit.
                     break
+                print "post get "
                 logger = logging.getLogger(record.name)
                 logger.handle(record) # No level or filter logic applied - just do it!
+                print "write handle post get "
+
+            except Queue.Empty:
+                empty_count += 1
+                print "Adding to empty count: %s" % empty_count
+
             except (KeyboardInterrupt, SystemExit):
+                print "pre raise"
                 raise
             except:
                 import sys, traceback
@@ -168,5 +189,12 @@ class MainLogger(object):
         """ Wrapper to add a None poison pill to the listener process queue to
         ensure it exits.
         """
-        self.log_queue.put_nowait(None)
+        #self.log_queue.put_nowait(None)
+        self.log_queue.put(None)
+        print "Post poison pill put"
+        time.sleep(1.0)
+        print "pre terminate"
+        self.listener.terminate()
+        print "pre join"
         self.listener.join()
+        print "at the end of close"

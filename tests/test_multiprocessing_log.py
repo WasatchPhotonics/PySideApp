@@ -54,20 +54,25 @@ class TestLogFile():
         pytest capture fixtures does not seem to be able to record those values.
         """
         main_logger = applog.MainLogger()
+        print "level 1"
 
         log_queue = main_logger.log_queue
         sub_proc = multiprocessing.Process(target=self.worker_process,
                                            args=(log_queue,))
+        print "level 2"
         sub_proc.start()
-
+        print "level 3"
         time.sleep(1.0) # make sure the process has enough time to emit
 
+
+        print "level 4"
         main_logger.close()
+        time.sleep(1.0) # required to let file creation happen
 
-        time.sleep(0.5) # required to let file creation happen
-
+        print "level 5"
         log_text = caplog.text()
 
+        print "level 6"
         assert "Top level log configuration" in log_text
         assert "Sub process setup configuration" not in log_text
         assert "Sub process debug log info" not in log_text
@@ -86,6 +91,8 @@ class TestLogFile():
         sub_proc.start()
 
         time.sleep(1.0) # make sure the process has enough time to emit
+        sub_proc.terminate()
+        sub_proc.join()
 
         main_logger.close()
 
