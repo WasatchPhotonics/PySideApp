@@ -15,11 +15,11 @@ goals are:
         Well defined interfaces for easier testability 
 
     100% Test Coverage:
-        Use pytest-qt and qtbot to click buttons and simulator an operator
+        Use pytest-qt and qtbot to click buttons and simulate an operator
 
     Continuous Integration ready:
         Example travis configuration
-        draft appveyor configuration
+        Draft appveyor configuration
 
     Multiprocessing:
         Provide framework for long-polling reads from hardware
@@ -51,11 +51,4 @@ Running tests:
 
     Showing log prints during the process:
         py.test tests/test_device.py --capture=no
-
-        If pytest-capturelog is installed:
-        py.test tests/test_device.py --capture=no 
-
-
-
-
 
