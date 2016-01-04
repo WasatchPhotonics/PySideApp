@@ -4,7 +4,7 @@ current timestamp. Used to demonstrate pytest-qt qtbot button clicking.
 """
 import datetime
 
-from PySide import QtGui
+from PySide import QtGui, QtCore
 
 import logging
 log = logging.getLogger(__name__)
@@ -41,16 +41,31 @@ class BasicWindow(QtGui.QMainWindow):
         self.txt_box = QtGui.QTextEdit("Event text area")
         self.vbox.addWidget(self.txt_box)
 
-        self.setup_signals()
+        self.create_signals()
 
         self.setGeometry(30, 30, 400, 400)
         self.show()
-
-    def setup_signals(self):
-        self.button.clicked.connect(self.change_text)
 
     def change_text(self):
         new_txt = "Button clicked: %s" % datetime.datetime.now()
         self.lbl_info.setText(new_txt)
         log.debug(new_txt)
         print "post log debug STDOUT: %s" % new_txt
+
+    def create_signals(self):
+        """ Create signal objects to be used by controller and internal simple
+        events.
+        """
+        self.button.clicked.connect(self.change_text)
+
+        class ViewClose(QtCore.QObject):
+            exit = QtCore.Signal(str)
+
+        self.exit_signal = ViewClose()
+
+    def closeEvent(self, event):
+        """ Custom signal for controller to catch when the GUI close event is
+        triggered by the user.
+        """
+        log.debug("View level close")
+        self.exit_signal.exit.emit("close event")

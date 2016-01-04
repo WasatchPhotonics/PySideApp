@@ -61,3 +61,17 @@ class TestBasicWindow:
 
         self.visualization_wait(my_form, qtbot)
         assert "Button clicked" in caplog.text()
+
+    def test_close_view_triggers_custom_signal(self, my_form, caplog, qtbot):
+        """ Control script reads from close event triggered by GUI close event,
+        such as the user clicking the window X. This test ensures that that
+        signal is available.
+        """
+        QtTest.QTest.qWaitForWindowShown(my_form)
+
+        signal = my_form.exit_signal.exit
+        timeout = 3
+        with qtbot.wait_signal(signal, timeout=timeout):
+            my_form.close()
+
+        assert "View level close" in caplog.text()

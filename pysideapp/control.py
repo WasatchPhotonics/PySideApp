@@ -20,10 +20,28 @@ class Controller(object):
         # Create a separate process for the qt gui event loop
         self.form = views.BasicWindow()
 
+        self.create_signals()
+
+        self.bind_view_signals()
+
         self.device = devices.LongPollingSimulateSpectra(log_queue)
         self.total_spectra = 0
 
         self.setup_main_event_loop()
+
+    def create_signals(self):
+        """ Create signals for access by parent process.
+        """
+        class ControlClose(QtCore.QObject):
+            log.debug("Control level close")
+            exit = QtCore.Signal(str)
+
+        self.control_exit_signal = ControlClose()
+
+    def bind_view_signals(self):
+        """ Connect GUI form signals to control events.
+        """
+        self.form.exit_signal.exit.connect(self.close)
 
     def setup_main_event_loop(self):
         """ Create a timer for a continuous event loop, trigger the start.
