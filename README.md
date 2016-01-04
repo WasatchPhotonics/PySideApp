@@ -1,8 +1,27 @@
 # PySideApp
 Minimal application demonstrating core features for deployable applications
 
-[![Build Status](https://travis-ci.org/WasatchPhotonics/PySideApp.svg?branch=master)](https://travis-ci.org/WasatchPhotonics/PySideApp.svg?branch=master)
-[![Coverage Status](https://coveralls.io/repos/WasatchPhotonics/PySideApp/badge.svg?branch=master&service=github)](https://coveralls.io/github/WasatchPhotonics/PySideApp?branch=master)
+Why is this build broken? Queue Handler removal in py.test                                                
+                                                                                                              
+I never want to see this error again, so these two builds are left in                                         
+here with the debug statements and broken build statuses. Run py.test on                                      
+Linux, and you should see a hang in the test suite. Possibly after all                                        
+tests have been run, possibly in a specific test. Run py.test on Windows                                      
+and all of the tests will report successful with no hang.                                                     
+Run the tests/test_ files individually, and all is well.
+This is apparently due to the addition of the QueueHandler to the custom
+logging. Removing the queuehandler from the root logger at the end of
+every test case appears to clear up this issue. 
+
+
+Again, this is only if the entire test suite is run. And only at
+specific iteractions of the custom logging setup and py.test.  This
+particular branch will hang on the 4th test of test_devices.py when all
+tests are run with py.test. But only on Linux and Travis, not on MS
+windows.
+
+
+
 
 PySideApp is designed to be the baseline project structure for the next
 level of Wasatch Photonics customer facing software. The main design
