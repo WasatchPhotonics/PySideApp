@@ -26,6 +26,7 @@ class TestLogFile():
         time.sleep(0.5) # required to let file creation happen
 
         assert applog.log_file_created() == True
+        self.explicit_log_close()
 
 
     def test_log_file_has_entries(self):
@@ -39,6 +40,7 @@ class TestLogFile():
         log_text = applog.get_text_from_log()
 
         assert "Top level log configuration" in log_text
+        self.explicit_log_close()
 
 
     def test_log_capture_fixture_can_read_top_level_log(self, caplog):
@@ -46,6 +48,7 @@ class TestLogFile():
         main_logger.close()
 
         assert "Top level log configuration" in caplog.text()
+        self.explicit_log_close()
 
 
     def test_log_capture_fixture_does_not_see_sub_process_entries(self, caplog):
@@ -71,6 +74,7 @@ class TestLogFile():
         assert "Top level log configuration" in log_text
         assert "Sub process setup configuration" not in log_text
         assert "Sub process debug log info" not in log_text
+        self.explicit_log_close()
 
     def test_log_file_has_sub_process_entries(self):
         """ This test documents the alternative: slurp the log results back in
@@ -96,6 +100,7 @@ class TestLogFile():
         assert "Top level log configuration" in log_text
         assert "Sub process setup configuration" in log_text
         assert "Sub process debug log info" in log_text
+        self.explicit_log_close()
 
 
     def worker_process(self, log_queue):
@@ -120,4 +125,17 @@ class TestLogFile():
         #print('Worker finished: %s' % name)
 
 
+
+
+    def explicit_log_close(self):
+        """ Tests on windows will recreate a secondary log handler to
+        stdout/file. Teardown does not see the expected log variable, so
+        use this function to close all of the log file handlers.
+        """
+        import logging
+        the_log = logging.getLogger()
+        handlers = the_log.handlers[:]
+        for handler in handlers:
+            handler.close()
+            the_log.removeHandler(handler)
 
