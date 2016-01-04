@@ -63,3 +63,29 @@ class TestBasicDevice:
 
         assert "SimulateSpectra setup" in log_text
         assert "SimulateSpectra setup" not in caplog.text()
+
+    def test_subprocess_data_collect_is_logged_in_file(self, caplog):
+        assert applog.delete_log_file_if_exists() == True
+
+        main_logger = applog.MainLogger()
+
+        device = devices.LongPollingSimulateSpectra(main_logger.log_queue)
+
+        result = device.read()
+        while result is None:
+            time.sleep(0.2)
+            print "Read: %s" % result
+            result = device.read()
+
+        assert len(result) == 1024
+
+        device.close()
+        time.sleep(1.0) # make sure the process has enough time to emit
+
+        main_logger.close()
+        time.sleep(1.0) # required to let file creation happen
+
+        log_text = applog.get_text_from_log()
+
+        assert "Collected data in continuous" in log_text
+        assert "Collected data in continuous" not in caplog.text()
