@@ -45,3 +45,24 @@ class TestControl:
         main_logger.close()
         time.sleep(1)
         assert "Init of BasicWindow" in caplog.text()
+
+    def test_device_logs_in_file_only(self, caplog, qtbot):
+        """ Shows the expected behavior. Demonstrates that the capturelog
+        fixture on py.test does not see sub process entries.
+        """
+        assert applog.delete_log_file_if_exists() == True
+
+        main_logger = applog.MainLogger()
+
+        app_control = control.Controller(main_logger.log_queue)
+        self.visualization_wait(app_control.form, qtbot)
+
+        app_control.close()
+        time.sleep(1)
+
+        main_logger.close()
+        time.sleep(1)
+
+        log_text = applog.get_text_from_log()
+        assert "SimulateSpectra setup" in log_text
+        assert "SimulateSpectra setup" not in caplog.text()

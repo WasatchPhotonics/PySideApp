@@ -49,6 +49,7 @@ def get_text_from_log():
     log_file = open(FILENAME)
     for line_read in log_file:
         log_text += line_read
+    log_file.close()
     return log_text
 
 
