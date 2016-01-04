@@ -16,11 +16,13 @@ class TestBasicDevice:
     def test_direct_logging_is_available(self, caplog):
         device = devices.SimulateSpectra()
         assert "SimulateSpectra setup" in caplog.text()
+        self.explicit_log_close()
 
     def test_direct_device_is_available(self, caplog):
         device = devices.SimulateSpectra()
         result = device.read()
         assert len(result) == 1024
+        self.explicit_log_close()
 
     def test_subprocess_device_logging_is_unavailable(self, caplog):
         """ Shows the expected interactions between py.test, the caplog fixture,
@@ -31,6 +33,7 @@ class TestBasicDevice:
         device = devices.LongPollingSimulateSpectra()
         device.close()
         assert "SimulateSpectra setup" not in caplog.text()
+        self.explicit_log_close()
 
     def test_subprocess_device_logging_in_file(self, caplog):
         """ Define the application wide queue handler for the logging, assign it
@@ -42,7 +45,6 @@ class TestBasicDevice:
         from the log file, which seems to work in executable, bare bones
         application, and pytest mode.
         """
-        return
         assert applog.delete_log_file_if_exists() == True
 
         main_logger = applog.MainLogger()
@@ -64,9 +66,9 @@ class TestBasicDevice:
 
         assert "SimulateSpectra setup" in log_text
         assert "SimulateSpectra setup" not in caplog.text()
+        self.explicit_log_close()
 
     def test_subprocess_data_collect_is_logged_in_file(self, caplog):
-        return
         assert applog.delete_log_file_if_exists() == True
 
         main_logger = applog.MainLogger()
@@ -91,3 +93,17 @@ class TestBasicDevice:
 
         assert "Collected data in continuous" in log_text
         assert "Collected data in continuous" not in caplog.text()
+        self.explicit_log_close()
+
+    def explicit_log_close(self):
+        """ Tests on windows will recreate a secondary log handler to
+        stdout/file. Teardown does not see the expected log variable, so
+        use this function to close all of the log file handlers.
+        """
+        import logging
+        the_log = logging.getLogger()
+        handlers = the_log.handlers[:]
+        for handler in handlers:
+            handler.close()
+            the_log.removeHandler(handler)
+
