@@ -21,7 +21,7 @@ setup(windows=["scripts/PySideApp.py"],
 
                             "bundle_files": 1,
 
-                            "dist_dir": "built-dist-PySideApp",
+                            "dist_dir": "scripts/built-dist-PySideApp",
                           },
 
 
