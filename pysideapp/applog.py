@@ -14,14 +14,34 @@ import logging
 import platform
 import multiprocessing
 
-FILENAME = "mptest_log.txt"
-
 def get_location():
     """ Determine the location to store the log file. Current directory
     on Linux, or %PROGRAMDATA% on windows - usually c:\ProgramData\
     """
-    log_dir = "./"
-    return(log_dir)
+    suffix = "PySideApp_log.txt"
+
+    if "Linux" in platform.platform():
+        return suffix
+
+    log_dir = ""
+    try:
+        import ctypes
+        from ctypes import wintypes, windll
+        CSIDL_COMMON_APPDATA = 35
+        _SHGetFolderPath = windll.shell32.SHGetFolderPathW
+        _SHGetFolderPath.argtypes = [wintypes.HWND,
+                                    ctypes.c_int,
+                                    wintypes.HANDLE,
+                                    wintypes.DWORD, wintypes.LPCWSTR]
+
+        path_buf = wintypes.create_unicode_buffer(wintypes.MAX_PATH)
+        result = _SHGetFolderPath(0, CSIDL_COMMON_APPDATA, 0, 0, path_buf)
+        log_dir = path_buf.value
+    except:
+        log.exception("Problem assigning log directory")
+
+    windows_file = "%s/%s" % (log_dir, suffix)
+    return(windows_file)
 
 def process_log_configure(log_queue):
     """ Called at the beginning of every process, including the main process.
@@ -46,7 +66,7 @@ def get_text_from_log():
     """
 
     log_text = ""
-    log_file = open(FILENAME)
+    log_file = open(get_location())
     for line_read in log_file:
         log_text += line_read
     log_file.close()
@@ -56,7 +76,7 @@ def get_text_from_log():
 def log_file_created():
     """ Helper function that returns True if file exists, false otherwise.
     """
-    filename = FILENAME
+    filename = get_location()
     if os.path.exists(filename):
         return True
 
@@ -65,7 +85,7 @@ def log_file_created():
 def delete_log_file_if_exists():
     """ Remove the specified log file and return True if succesful.
     """
-    filename = FILENAME
+    filename = get_location()
 
     if os.path.exists(filename):
         os.remove(filename)
@@ -133,7 +153,6 @@ class MainLogger(object):
         """
 
         log_dir = get_location()
-        log_dir += "/%s_log.txt" % "mptest"
 
         root = logging.getLogger()
         h = logging.FileHandler(log_dir, 'w') # Overwrite previous run

@@ -119,18 +119,19 @@ class TestLogFile():
         # created in the applog.process_log_configure call above.
         root_log = logging.getLogger()
 
-        name = multiprocessing.current_process().name
-        #print('Worker started: %s' % name)
-        root_log.debug("%s Sub process debug log info", name)
-        #print('Worker finished: %s' % name)
+        proc_name = multiprocessing.current_process().name
 
+        root_log.debug("%s Sub process debug log info", proc_name)
 
 
 
     def explicit_log_close(self):
-        """ Tests on windows will recreate a secondary log handler to
-        stdout/file. Teardown does not see the expected log variable, so
-        use this function to close all of the log file handlers.
+        """ Apparently, tests run in py.test will not remove the existing
+        handlers as expected. This mainfests as hanging tests during py.tes
+        runs, or after non-termination hang of py.test after all tests report
+        succesfully. Only on linux though, windows appears to Do What I Want.
+        Use this function to close all of the log file handlers, including the
+        QueueHandler custom objects.
         """
         import logging
         the_log = logging.getLogger()
