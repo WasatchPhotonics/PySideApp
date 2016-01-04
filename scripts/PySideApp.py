@@ -4,9 +4,9 @@
 import sys
 import logging
 import argparse
+import multiprocessing
 
 from PySide import QtGui, QtCore
-
 
 from pysideapp import control
 from pysideapp import applog
@@ -95,4 +95,5 @@ def main(argv=None):
     return exit_code
 
 if __name__ == "__main__":
+    multiprocessing.freeze_support()
     sys.exit(main(sys.argv))

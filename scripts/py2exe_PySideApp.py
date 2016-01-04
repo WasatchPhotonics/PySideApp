@@ -1,12 +1,15 @@
 """This is based heavily on:
 http://ralsina.me/weblog/posts/BB955.html
 
+Run:
+    cd PySideApp
+    python scripts/py2exe_PySideApp.py py2exe
 """
 
 from distutils.core import setup
 import py2exe
 
-setup(console=["exmp_four.py"],
+setup(console=["scripts/PySideApp.py"],
       options={"py2exe": {
 
                             "dll_excludes": [ "MSVCP90.dll", "MSWSOCK.dll",

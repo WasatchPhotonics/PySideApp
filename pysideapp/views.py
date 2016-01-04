@@ -6,6 +6,8 @@ import datetime
 
 from PySide import QtGui, QtCore
 
+from pysideapp.assets import pysideapp_resources_rc
+
 import logging
 log = logging.getLogger(__name__)
 
@@ -28,7 +30,7 @@ class BasicWindow(QtGui.QMainWindow):
         self.central_widget.addWidget(self.main_widget)
 
         self.lbl_logo = QtGui.QLabel()
-        logo_filename = "pysideapp/assets/images/wp_logo.png"
+        logo_filename = ":ui/images/wp_logo.png"
         self.lbl_logo.setPixmap(QtGui.QPixmap(logo_filename))
         self.vbox.addWidget(self.lbl_logo)
 
