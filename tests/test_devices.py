@@ -32,3 +32,34 @@ class TestBasicDevice:
         device.close()
         assert "SimulateSpectra setup" not in caplog.text()
 
+    def test_subprocess_device_logging_in_file(self, caplog):
+        """ Define the application wide queue handler for the logging, assign it
+        to the device process. This test is about demonstrating actual usage in
+        order to process the results in py.test.
+        One of the confusing aspects here may be that in a bare bones
+        application example, the log prints to the console still appear, on
+        windows and linux. pytest does not see them however. Slurp them back in
+        from the log file, which seems to work in executable, bare bones
+        application, and pytest mode.
+        """
+        assert applog.delete_log_file_if_exists() == True
+
+        main_logger = applog.MainLogger()
+
+        device = devices.LongPollingSimulateSpectra(main_logger.log_queue)
+
+        """ NOTE: these sleeps are critical on windows. They do not seem to
+        matter on linux though. They have to be in the order listed below or the
+        pytest run will hang on cleanup. That is, all the tests will be run,
+        assertions processed, and it just hangs at the end of the run.
+        """
+        time.sleep(1.0) # make sure the process has enough time to emit
+        device.close()
+
+        main_logger.close()
+        time.sleep(1.0) # required to let file creation happen
+
+        log_text = applog.get_text_from_log()
+
+        assert "SimulateSpectra setup" in log_text
+        assert "SimulateSpectra setup" not in caplog.text()
