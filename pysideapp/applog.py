@@ -107,10 +107,14 @@ class QueueHandler(logging.Handler):
             if ei:
                 dummy = self.format(record) # just to get traceback text into record.exc_text
                 record.exc_info = None  # not needed any more
+            print "in put no wait"
             self.log_queue.put_nowait(record)
+            print "after in put no wait"
         except (KeyboardInterrupt, SystemExit):
+            print "Emit queue handler raise"
             raise
         except:
+            print "Handle the error"
             self.handleError(record)
 
 
