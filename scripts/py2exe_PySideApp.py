@@ -9,7 +9,7 @@ Run:
 from distutils.core import setup
 import py2exe
 
-setup(console=["scripts/PySideApp.py"],
+setup(windows=["scripts/PySideApp.py"],
       options={"py2exe": {
 
                             "dll_excludes": [ "MSVCP90.dll", "MSWSOCK.dll",
