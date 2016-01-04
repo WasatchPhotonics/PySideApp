@@ -16,7 +16,8 @@ every test case appears to clear up this issue.
 Again, this is only if the entire test suite is run. And only at
 specific iteractions of the custom logging setup and py.test.  This
 particular branch will hang on the 5th test of test_devices.py when all
-tests are run with py.test.
+tests are run with py.test. But only on Linux and Travis, not on MS
+windows.
 
 
 
