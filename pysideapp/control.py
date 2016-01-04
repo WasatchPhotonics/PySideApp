@@ -33,7 +33,6 @@ class Controller(object):
         """ Create signals for access by parent process.
         """
         class ControlClose(QtCore.QObject):
-            log.debug("Control level close")
             exit = QtCore.Signal(str)
 
         self.control_exit_signal = ControlClose()
@@ -68,4 +67,6 @@ class Controller(object):
     def close(self):
         self.continue_loop = False
         self.device.close()
+        log.debug("Control level close")
+        self.control_exit_signal.exit.emit("Control level close")
 

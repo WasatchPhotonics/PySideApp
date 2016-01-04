@@ -55,23 +55,14 @@ class PySideApplication(object):
         main as possible and create the qapplication here so the
         testing code can function separately with pytest-qt.
         """
-        app = QtGui.QApplication([])
+        self.app = QtGui.QApplication([])
 
-        # Non-blocking demonstration
-        #device_class = "DeviceWrappers"
-        #device_type = "NonBlockingInterface"
-        #device_args = "PhidgeterWrappers.IRHistory"
-        #title = "IR TEMP"
-        #cb = control.BlueGraphController
-        ##self.control = cb(device_class, device_type, device_args, title)
-        #self.control.control_exit_signal.exit.connect(self.closeEvent)
+        self.main_logger = applog.MainLogger()
+        app_control = control.Controller(self.main_logger.log_queue)
 
-        main_logger = applog.MainLogger()
-        app_control = control.Controller(main_logger.log_queue)
+        app_control.control_exit_signal.exit.connect(self.closeEvent)
 
-        self.control.control_exit_signal.exit.connect(self.closeEvent)
-
-        sys.exit(app.exec_())
+        sys.exit(self.app.exec_())
 
 
     def closeEvent(self):
@@ -79,7 +70,8 @@ class PySideApplication(object):
         call qapplication Quit. This will prevent hangs on exit.
         """
         log.debug("Application quit")
-        QtGui.QApplication.quit()
+        self.main_logger.close()
+        self.app.quit()
 
 def main(argv=None):
     """ main calls the wrapper code around the application objects with
