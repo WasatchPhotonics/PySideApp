@@ -43,11 +43,11 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableDirPage=yes
 DefaultGroupName={#MyAppName}
-OutputDir=scripts\windows_installer
+OutputDir=windows_installer
 OutputBaseFilename={#MyAppName}_setup
 Compression=lzma
 SolidCompression=yes
-SetupIconFile=pysideapp\assets\images\PySideAppIcon.ico
+SetupIconFile=..\pysideapp\assets\images\PySideAppIcon.ico
 UninstallDisplayIcon={app}\PySideApp.exe
 
 [Languages]
@@ -57,7 +57,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "scripts\built-dist-PySideApp\PySideApp.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "built-dist-PySideApp\PySideApp.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
