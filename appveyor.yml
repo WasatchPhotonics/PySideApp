@@ -13,9 +13,9 @@ environment:
       PYTHON_VERSION: "2.7.10"
       PYTHON_ARCH: "32"
 
-    - PYTHON: "C:\\Python27.10-x64"
-      PYTHON_VERSION: "2.7.10"
-      PYTHON_ARCH: "64"
+    #- PYTHON: "C:\\Python27.10-x64"
+    #PYTHON_VERSION: "2.7.10"
+    #PYTHON_ARCH: "64"
 
 install:
   - ECHO "Filesystem root:"
@@ -79,5 +79,6 @@ artifacts:
    - path: scripts\\build-dist-PySideApp\\*
    - path: scripts\\windows_installer\\*
 
-#on_success:
+on_success:
 #  - TODO: upload the content of dist/*.whl to a public wheelhouse
+   - path: scripts\build-dist-PySideApp\*
