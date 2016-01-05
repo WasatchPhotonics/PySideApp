@@ -26,8 +26,6 @@ setup(windows=[
                             "includes": [],
                             "excludes": [],
 
-                            "bundle_files": 1,
-
                             "dist_dir": "scripts/built-dist-PySideApp",
                           },
 
