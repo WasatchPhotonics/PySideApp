@@ -18,6 +18,9 @@ class BasicWindow(QtGui.QMainWindow):
         log.debug("Init of %s" % self.__class__.__name__)
         super(BasicWindow, self).__init__(parent)
 
+        app_icon = QtGui.QIcon(":ui/images/PySideAppIcon.ico")
+        self.setWindowIcon(app_icon)
+
         # The main widget. Certain implementations will still create a
         # form with the geometry specified below. Enforce the central
         # widget for better portability.

@@ -47,6 +47,8 @@ OutputDir=C:\projects\PySideApp\scripts\windows_installer
 OutputBaseFilename={#MyAppName}_setup
 Compression=lzma
 SolidCompression=yes
+SetupIconFile=c:\projects\PySideApp\pysideapp\assets\images\PySideAppIcon.ico
+UninstallDisplayIcon={app}\PySideApp.exe
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -59,8 +61,9 @@ Source: "C:\projects\PySideApp\scripts\built-dist-PySideApp\PySideApp.exe"; Dest
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\PySideApp.exe"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

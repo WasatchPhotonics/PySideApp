@@ -9,7 +9,14 @@ Run:
 from distutils.core import setup
 import py2exe
 
-setup(windows=["scripts/PySideApp.py"],
+setup(windows=[
+                {   "script":"scripts/PySideApp.py",
+                    "icon_resources": 
+                    [
+                        (0, "pysideapp/assets/images/PySideAppIcon.ico")
+                    ],
+                }
+              ],
       options={"py2exe": {
 
                             "dll_excludes": [ "MSVCP90.dll", "MSWSOCK.dll",

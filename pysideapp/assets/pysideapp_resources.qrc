@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="ui">
     <file>images/wp_logo.png</file>
+    <file>images/PySideAppIcon.ico</file>
   </qresource>
 </RCC>
