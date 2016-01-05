@@ -71,8 +71,6 @@ after_test:
    - ps: "ls scripts\\windows-installer\\*"
 
 artifacts:
-   - ps: "ls scripts\\build-dist-PySideApp\\*"
-   - ps: "ls scripts\\windows-installer\\*"
    - path: scripts\\build-dist-PySideApp\\*
    - path: scripts\\windows_installer\\*
 
