@@ -47,6 +47,7 @@ install:
   # target Python version and architecture
   #- "%CMD_IN_ENV% pip install -r dev-requirements.txt"
   - "%CMD_IN_ENV% pip install pyside pytest pytest-qt pytest-capturelog"
+  - "%CMD_IN_ENV% pip install py2exe"
 
   - choco install -y InnoSetup
 
