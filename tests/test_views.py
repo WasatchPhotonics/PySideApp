@@ -26,15 +26,6 @@ class TestBasicWindow:
 
         return new_form
 
-    def visualization_wait(self, my_form, qtbot, timeout=1000):
-        """ Helper function that waits for a signal created by default
-        on all widgets. Use qtbot to timeout when this signal is not
-        received.
-        """
-        signal = my_form.customContextMenuRequested
-        with qtbot.wait_signal(signal, timeout=timeout):
-            my_form.show()
-
     def test_form_has_text_and_button_controls(self, my_form, qtbot):
         QtTest.QTest.qWaitForWindowShown(my_form)
 
@@ -50,8 +41,9 @@ class TestBasicWindow:
 
         qtbot.mouseClick(my_form.button, QtCore.Qt.LeftButton)
 
-        # For debugging the application events, use visualization wait
-        self.visualization_wait(my_form, qtbot)
+        # For debugging the application events, use wait to let you see the
+        # contents of the form
+        qtbot.wait(1000)
 
         assert "Button clicked" in my_form.lbl_info.text()
 
@@ -59,7 +51,7 @@ class TestBasicWindow:
         QtTest.QTest.qWaitForWindowShown(my_form)
         qtbot.mouseClick(my_form.button, QtCore.Qt.LeftButton)
 
-        self.visualization_wait(my_form, qtbot)
+        qtbot.wait(1000)
         assert "Button clicked" in caplog.text()
 
     def test_close_view_triggers_custom_signal(self, my_form, caplog, qtbot):
