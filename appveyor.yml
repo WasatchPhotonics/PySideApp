@@ -48,6 +48,8 @@ install:
   #- "%CMD_IN_ENV% pip install -r dev-requirements.txt"
   - "%CMD_IN_ENV% pip install pyside pytest pytest-qt pytest-capturelog"
 
+  - choco install -y InnoSetup
+
 #build_script:
 #  # Build the compiled extension
 #  - "%CMD_IN_ENV% python setup.py build"
@@ -66,10 +68,14 @@ test_script:
 #  - "%CMD_IN_ENV% python setup.py bdist_wininst"
 #  - "%CMD_IN_ENV% python setup.py bdist_msi"
 #  - ps: "ls dist"
+   - "%CMD_IN_ENV% python scripts/py2exe_PySideApp.py py2exe"
+   - "iscc scripts/PySideApp_InnoSetup.iss"
 
-#artifacts:
-##  # Archive the generated packages in the ci.appveyor.com build report.
+artifacts:
+#  # Archive the generated packages in the ci.appveyor.com build report.
 #  - path: dist\*
+   - path: scripts\build-dist-PySideApp\*
+   - path: scripts\windows_installer\*
 
 #on_success:
 #  - TODO: upload the content of dist/*.whl to a public wheelhouse
