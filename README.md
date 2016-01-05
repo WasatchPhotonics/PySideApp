@@ -1,7 +1,11 @@
 # PySideApp
 Minimal application demonstrating core features for deployable applications
 
-[![Build Status](https://travis-ci.org/WasatchPhotonics/PySideApp.svg?branch=master)](https://travis-ci.org/WasatchPhotonics/PySideApp?branch=master)
+[![Travis Build Status](https://travis-ci.org/WasatchPhotonics/PySideApp.svg?branch=master)](https://travis-ci.org/WasatchPhotonics/PySideApp?branch=master)
+
+[![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/uq88jhfykrh6k940?svg=true)](https://ci.appveyor.com/api/projects/status/uq88jhfykrh6k940?svg=true)
+
+
 [![Coverage Status](https://coveralls.io/repos/WasatchPhotonics/PySideApp/badge.svg?branch=master&service=github)](https://coveralls.io/github/WasatchPhotonics/PySideApp?branch=master)
 
 PySideApp is designed to be the baseline project structure for the next
