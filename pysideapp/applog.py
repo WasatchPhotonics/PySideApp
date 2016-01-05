@@ -173,7 +173,10 @@ class MainLogger(object):
         h.setFormatter(frmt)
         root.addHandler(h)
 
-        strm = logging.StreamHandler(sys.stderr)
+        # Specifing stderr as the log output location will cause the
+        # creation of a pysideapp.exe.log file when run as a post-freeze
+        # windows executable.
+        strm = logging.StreamHandler(sys.stdout)
         strm.setFormatter(frmt)
         root.addHandler(strm)
 
