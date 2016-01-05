@@ -68,8 +68,8 @@ after_test:
    - ps: "ls scripts\\windows_installer\\*.exe"
 
 artifacts:
-   - path: scripts\built-dist-PySideApp\*
-   - path: scripts\windows_installer\*
+   - path: scripts\built-dist-PySideApp\*.exe
+   - path: scripts\windows_installer\*.exe
 
 #on_success:
 #- ps: "ls scripts\\built-dist-PySideApp\\*"
