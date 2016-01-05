@@ -27,7 +27,7 @@ class TestControl:
         main_logger.close()
         time.sleep(1)
         assert "Control startup" in caplog.text()
-        self.explicit_log_close()
+        applog.explicit_log_close()
 
 
     def test_view_logs_visible_to_caplog(self, caplog, qtbot):
@@ -42,7 +42,7 @@ class TestControl:
         main_logger.close()
         time.sleep(1)
         assert "Init of BasicWindow" in caplog.text()
-        self.explicit_log_close()
+        applog.explicit_log_close()
 
     def test_device_logs_in_file_only(self, caplog, qtbot):
         """ Shows the expected behavior. Demonstrates that the capturelog
@@ -64,7 +64,7 @@ class TestControl:
         log_text = applog.get_text_from_log()
         assert "SimulateSpectra setup" in log_text
         assert "SimulateSpectra setup" not in caplog.text()
-        self.explicit_log_close()
+        applog.explicit_log_close()
 
 
     def test_close_view_emits_control_signal(self, caplog, qtbot):
@@ -84,17 +84,4 @@ class TestControl:
         main_logger.close()
         time.sleep(1)
         assert "Control level close" in caplog.text()
-        self.explicit_log_close()
-
-    def explicit_log_close(self):
-        """ Tests on windows will recreate a secondary log handler to
-        stdout/file. Teardown does not see the expected log variable, so
-        use this function to close all of the log file handlers.
-        """
-        import logging
-        the_log = logging.getLogger()
-        handlers = the_log.handlers[:]
-        for handler in handlers:
-            handler.close()
-            the_log.removeHandler(handler)
-
+        applog.explicit_log_close()

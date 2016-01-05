@@ -95,6 +95,19 @@ def delete_log_file_if_exists():
         return False
     return True
 
+def explicit_log_close():
+    """ Apparently, tests run in py.test will not remove the existing
+    handlers as expected. This mainfests as hanging tests during py.test
+    runs, or after non-termination hang of py.test after all tests report
+    succesfully. Only on linux though, windows appears to Do What I Want.
+    Use this function to close all of the log file handlers, including the
+    QueueHandler custom objects.
+    """
+    root_log = logging.getLogger()
+    handlers = root_log.handlers[:]
+    for handler in handlers:
+        handler.close()
+        root_log.removeHandler(handler)
 
 
 
