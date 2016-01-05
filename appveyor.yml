@@ -9,9 +9,9 @@ environment:
 
     # Python 2.7.10 is the latest version and is not pre-installed.
 
-    #- PYTHON: "C:\\Python27.10"
-    #  PYTHON_VERSION: "2.7.10"
-    #PYTHON_ARCH: "32"
+    - PYTHON: "C:\\Python27.10"
+      PYTHON_VERSION: "2.7.10"
+      PYTHON_ARCH: "32"
 
     - PYTHON: "C:\\Python27.10-x64"
       PYTHON_VERSION: "2.7.10"
@@ -46,7 +46,7 @@ install:
   # pip will build them from source using the MSVC compiler matching the
   # target Python version and architecture
   #- "%CMD_IN_ENV% pip install -r dev-requirements.txt"
-  - "%CMD_IN_ENV% pip install pyside pytest pytest-qt pytest-capturelog"
+  #- "%CMD_IN_ENV% pip install pyside pytest pytest-qt pytest-capturelog"
 
 #build_script:
 #  # Build the compiled extension
