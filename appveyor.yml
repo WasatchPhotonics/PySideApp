@@ -47,19 +47,10 @@ install:
   # target Python version and architecture
   #- "%CMD_IN_ENV% pip install -r dev-requirements.txt"
   - "%CMD_IN_ENV% pip install pyside pytest pytest-qt pytest-capturelog"
+  - "%CMD_IN_ENV% pip install http://sourceforge.net/projects/py2exe/files/latest/download?source=files"
 
-  
   - choco install -y InnoSetup
 
-  # Install requirements manually
-  # py2exe need all depends unzipped
-  # see: http://www.py2exe.org/index.cgi/ExeWithEggs
-  - python -m easy_install -Z restkit==4.2.2 watchdog==0.6.0
-
-  # Install py2exe
-  - pip install http://sourceforge.net/projects/py2exe/files/latest/download?source=files
-  - ps: (new-object net.webclient).DownloadFile($env:PYWIN32_URL, 'c:\\pywin32.exe')
-  - "%PYTHON%/Scripts/easy_install.exe c:\\pywin32.exe"
 
 #build_script:
 #  # Build the compiled extension
