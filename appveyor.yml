@@ -65,7 +65,7 @@ after_test:
    - "%CMD_IN_ENV% python scripts\\py2exe_PySideApp.py py2exe"
    - "iscc scripts\\PySideApp_InnoSetup.iss"
    - ps: "ls scripts\\built-dist-PySideApp\\*"
-   - ps: "ls scripts\\windows-installer\\*"
+   - ps: "ls scripts\\windows_installer\\*"
 
 artifacts:
    - path: scripts\\built-dist-PySideApp\\*
@@ -73,5 +73,5 @@ artifacts:
 
 on_success:
    - ps: "ls scripts\\built-dist-PySideApp\\*"
-   - ps: "ls scripts\\windows-installer\\*"
+   - ps: "ls scripts\\windows_installer\\*"
    - path: scripts\built-dist-PySideApp\*
