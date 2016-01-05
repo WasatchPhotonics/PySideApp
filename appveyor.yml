@@ -18,11 +18,11 @@ environment:
     #PYTHON_ARCH: "64"
 
 install:
-  - ECHO "Filesystem root:"
-  - ps: "ls \"C:/\""
+    #- ECHO "Filesystem root:"
+    #- ps: "ls \"C:/\""
 
-  - ECHO "Installed SDKs:"
-  - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
+    #- ECHO "Installed SDKs:"
+    #- ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
 
   # Install Python (from the official .msi of http://python.org) and pip when
   # not already installed.
@@ -64,12 +64,12 @@ test_script:
 after_test:
    - "%CMD_IN_ENV% python scripts\\py2exe_PySideApp.py py2exe"
    - "iscc scripts\\PySideApp_InnoSetup.iss"
-   - ps: "ls scripts\\built-dist-PySideApp\\*"
-   - ps: "ls scripts\\windows_installer\\*"
+   - ps: "ls scripts\\built-dist-PySideApp\\*.exe"
+   - ps: "ls scripts\\windows_installer\\*.exe"
 
 artifacts:
-   - path: scripts\\built-dist-PySideApp\\*
-   - path: scripts\\windows_installer\\*
+   - path: scripts\\built-dist-PySideApp\\*.exe
+   - path: scripts\\windows_installer\\*.exe
 
 on_success:
    - ps: "ls scripts\\built-dist-PySideApp\\*"
