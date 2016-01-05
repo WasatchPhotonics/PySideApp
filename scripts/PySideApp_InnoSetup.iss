@@ -57,7 +57,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "built-dist-PySideApp\PySideApp.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "built-dist-PySideApp\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

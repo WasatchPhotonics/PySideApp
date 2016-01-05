@@ -23,7 +23,7 @@ setup(windows=[
                                               "mswsock.dll", "powrprof.dll",
                                               "w9xpopen.exe",
                                             ],
-                            "includes": [],
+                            "includes": ["PySide"],
                             "excludes": [],
 
                             "dist_dir": "scripts/built-dist-PySideApp",
@@ -35,11 +35,12 @@ setup(windows=[
        # Create a subdirectory imageformats and put the qico4.dll file
        # inside of it.  This is required to read the application icon at
        # runtime.
-       data_files = [],
-       #data_files = [
-                        #("imageformats",
-                         #["C:\Python27\Lib\site-packages\PySide\plugins\imageformats\qico4.dll"]),
-                    #],
+       #data_files = [],
+       data_files = [
+                        ("imageformats",
+                         ["C:\Python27\Lib\site-packages\PySide\plugins\imageformats\qico4.dll"]
+                        ),
+                    ],
        zipfile=None
      )
 
