@@ -11,7 +11,7 @@ import py2exe
 
 setup(windows=[
                 {   "script":"scripts/PySideApp.py",
-                    "icon_resources": 
+                    "icon_resources":
                     [
                         (0, "pysideapp/assets/images/PySideAppIcon.ico")
                     ],
@@ -38,7 +38,7 @@ setup(windows=[
        #data_files = [],
        data_files = [
                         ("imageformats",
-                         ["C:\Python27\Lib\site-packages\PySide\plugins\imageformats\qico4.dll"]
+                         ["C:\Python27.10\Lib\site-packages\PySide\plugins\imageformats\qico4.dll"]
                         ),
                     ],
        zipfile=None
