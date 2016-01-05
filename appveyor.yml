@@ -52,10 +52,7 @@ install:
   - choco install -y InnoSetup
   - set PATH="C:\Program Files (x86)\Inno Setup 5";%PATH%
 
-#build_script:
-#  # Build the compiled extension
-#  - "%CMD_IN_ENV% python setup.py build"
-#
+# Build is off because it is not applicable to python
 build: off
 
 test_script:
@@ -67,14 +64,14 @@ test_script:
 after_test:
    - "%CMD_IN_ENV% python scripts\\py2exe_PySideApp.py py2exe"
    - "iscc scripts\\PySideApp_InnoSetup.iss"
-   - ps: "ls scripts\\build-dist-PySideApp\\*"
+   - ps: "ls scripts\\built-dist-PySideApp\\*"
    - ps: "ls scripts\\windows-installer\\*"
 
 artifacts:
-   - path: scripts\\build-dist-PySideApp\\*
+   - path: scripts\\built-dist-PySideApp\\*
    - path: scripts\\windows_installer\\*
 
 on_success:
-   - ps: "ls scripts\\build-dist-PySideApp\\*"
+   - ps: "ls scripts\\built-dist-PySideApp\\*"
    - ps: "ls scripts\\windows-installer\\*"
-   - path: scripts\build-dist-PySideApp\*
+   - path: scripts\built-dist-PySideApp\*
