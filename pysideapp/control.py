@@ -2,16 +2,12 @@
 updates with MVC style architecture.
 """
 
-import logging
-
 from PySide import QtCore
 
-from pysideapp import views, devices
+from . import views, devices
 
-# Do you want this here - or do you want the queue handler listener started
-# here?
+import logging
 log = logging.getLogger(__name__)
-
 
 class Controller(object):
     def __init__(self, log_queue):

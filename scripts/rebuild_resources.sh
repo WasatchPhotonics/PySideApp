@@ -14,8 +14,8 @@ if [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
 fi
 
 echo "Rebuilding resources file"
+# Use the relative package name glob so the build is portable across
+# other projects
 $CMD_NAME \
-    pysideapp/assets/pysideapp_resources.qrc \
-    -o pysideapp/assets/pysideapp_resources_rc.py
-    #assets/bluegraph_resources.qrc \
-    #-o assets/bluegraph_resources_rc.py
+    */assets/resources.qrc \
+    -o */assets/resources_rc.py

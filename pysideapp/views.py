@@ -6,7 +6,7 @@ import datetime
 
 from PySide import QtGui, QtCore
 
-from pysideapp.assets import pysideapp_resources_rc
+from .assets import resources_rc
 
 import logging
 log = logging.getLogger(__name__)
@@ -47,7 +47,7 @@ class BasicWindow(QtGui.QMainWindow):
 
         self.setGeometry(30, 30, 400, 400)
         self.show()
-        app_icon = QtGui.QIcon(":ui/images/PySideAppIcon.ico")
+        app_icon = QtGui.QIcon(":ui/images/ApplicationIcon.ico")
         self.setWindowIcon(app_icon)
 
 

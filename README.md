@@ -53,3 +53,21 @@ Running tests:
     Showing log prints during the process:
         py.test tests/test_device.py --capture=no
 
+
+Converting to a new project:
+    Copy over this full directory tree, and replace every instance of
+    PySideApp with the new project name. Pay attention to the case
+    sensitivity where appropriate. For example, if the new project name
+    is FastPM100, you would do:
+
+    cd projects
+    mkdir FastPM100
+    cd FastPM100
+    cp -r ../PySideApp/ .
+
+    mv pysideapp fastpm100
+
+    mv scripts/PySideApp.py scripts/FastPM100.py
+    mv scripts/PySideApp_InnoSetup.iss scripts/FastPM100_InnoSetup.iss
+    mv scripts/built-dist-PySideApp/ scripts/built-dist-FastPM100/
+

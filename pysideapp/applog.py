@@ -18,7 +18,10 @@ def get_location():
     """ Determine the location to store the log file. Current directory
     on Linux, or %PROGRAMDATA% on windows - usually c:\ProgramData\
     """
-    suffix = "PySideApp_log.txt"
+    # For convenience, replace the dot with an underscore to help windows know
+    # it is a text file.
+    module_name = __name__.replace(".", "_")
+    suffix = "%s.txt" % module_name
 
     if "Linux" in platform.platform():
         return suffix
