@@ -1,6 +1,10 @@
-; See the file py2exe_PySideApp.py for details on how to create a
+; See the file py2exe_applicatin.py for details on how to create a
 ; windows installer
 ;
+; Redefine these for the application to be built
+#define MyAppName "PySideApp"
+#define module_name "pysideapp"
+#define MyAppExeName "PySideApp.exe"
 ;
 ;
 ; Built for InnoSetup version 5.5.6 on Windows 7 x64
@@ -19,10 +23,9 @@
 ; Store the number in the ini file for the next build.
 #expr WriteIni(SourcePath + "\\BuildInfo.ini","Info","Build",BuildNum)
 
-#define MyAppName "PySideApp"
+
 #define MyAppPublisher "Wasatch Photonics"
 #define MyAppURL "http://wasatchphotonics.com"
-#define MyAppExeName "PySideApp.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -47,8 +50,8 @@ OutputDir=windows_installer
 OutputBaseFilename={#MyAppName}_setup
 Compression=lzma
 SolidCompression=yes
-SetupIconFile=..\pysideapp\assets\images\PySideAppIcon.ico
-UninstallDisplayIcon={app}\PySideApp.exe
+SetupIconFile=..\{#module_name}\assets\images\ApplicationIcon.ico
+UninstallDisplayIcon={app}\{#MyAppExeName}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -57,12 +60,12 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "built-dist-PySideApp\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
+Source: "built-dist\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\PySideApp.exe"
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\{#MyAppExeName}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 

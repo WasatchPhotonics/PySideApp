@@ -8,7 +8,7 @@ import Queue
 import logging
 import multiprocessing
 
-from pysideapp import applog
+from . import applog
 
 log = logging.getLogger(__name__)
 

@@ -2,18 +2,23 @@
 http://ralsina.me/weblog/posts/BB955.html
 
 Run:
-    cd PySideApp
-    python scripts/py2exe_PySideApp.py py2exe
+    change the project_name and module_name variables below
+    cd ProjectName
+    python scripts/py2exe_application.py py2exe
 """
 
 from distutils.core import setup
 import py2exe
 
+project_name = "PySideApp"
+module_name = "pysideapp"
+
 setup(windows=[
-                {   "script":"scripts/PySideApp.py",
+                {   "script":"scripts/%s.py" % project_name,
                     "icon_resources":
                     [
-                        (0, "pysideapp/assets/images/PySideAppIcon.ico")
+                        (0, "%s/assets/images/ApplicationIcon.ico" \
+                            % module_name)
                     ],
                 }
               ],
@@ -26,7 +31,7 @@ setup(windows=[
                             "includes": ["PySide"],
                             "excludes": [],
 
-                            "dist_dir": "scripts/built-dist-PySideApp",
+                            "dist_dir": "scripts/built-dist",
                           },
 
 

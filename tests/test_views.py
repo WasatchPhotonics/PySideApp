@@ -8,7 +8,7 @@ import pytest
 
 from PySide import QtCore, QtTest
 
-from pysideapp import views
+from . import views
 
 class TestBasicWindow:
 

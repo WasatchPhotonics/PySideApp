@@ -14,7 +14,7 @@ import time
 import logging
 import multiprocessing
 
-from pysideapp import applog
+from . import applog
 
 class TestLogFile():
     def test_log_file_is_created(self):
