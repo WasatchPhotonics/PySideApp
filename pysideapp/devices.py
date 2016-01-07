@@ -1,5 +1,5 @@
-""" Simulated device components for PySideApp. Simple blocking calls with
-simulated delays for simulated spectrometer readings. Long-polling
+""" Simulated device components for demonstration program. Simple blocking calls
+with simulated delays for simulated spectrometer readings. Long-polling
 multiprocessing wrappers.
 """
 

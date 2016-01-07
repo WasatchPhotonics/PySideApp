@@ -66,7 +66,27 @@ Converting to a new project:
     cd FastPM100
     rm -rf .git
     mv pysideapp fastpm100
+    mv scripts/PySideApp.py scripts/FastPM100.py
 
-    In setup.py, change the name, and test_suite fields from pysideapp
-    to fastpm100.
+    In the following files, change the module name from pysideapp to
+    fastpm100:
+    setup.py
+    tests/test_applog.py
+    tests/test_control.py
+    tests/test_devices.py
+    tests/test_views.py
 
+    Update README.md, replace PySideApp with FastPM100
+
+    Update scripts/Application_InnoSetup.iss, change MyAppName from
+    PySideApp to FastPM100 and module_name pysideapp to fastpm100.
+
+    Update scripts/py2exe_application.py, change project_name from
+    PySideApp to FastPM100 and module_name pysideapp to fastpm100.
+
+    Update scripts/FastPM100.py change the module name references from
+    pysideapp to fastpm100. Change the Class name from PySideApplication
+    to FastPM100Application.
+
+    git init
+    git add ./

@@ -1,4 +1,5 @@
-""" PySideApp custom logging setup and helper functions. This is based heavily on
+""" Demonstration program custom logging setup and helper functions. This is
+based heavily on
 http://plumberjack.blogspot.com/2010/09/using-logging-with-multiprocessing.html
 
 The general approach is that the control portion of the application instantiates
@@ -176,9 +177,9 @@ class MainLogger(object):
         h.setFormatter(frmt)
         root.addHandler(h)
 
-        # Specifing stderr as the log output location will cause the
-        # creation of a pysideapp.exe.log file when run as a post-freeze
-        # windows executable.
+        # Specifing stderr as the log output location will cause the creation of
+        # a _module_name_.exe.log file when run as a post-freeze windows
+        # executable.
         strm = logging.StreamHandler(sys.stdout)
         strm.setFormatter(frmt)
         root.addHandler(strm)

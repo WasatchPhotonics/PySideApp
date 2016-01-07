@@ -1,7 +1,6 @@
-""" GUI components for the PySideApp demonstration program. Provides a
-bare bones interface with a single button that changes the text to the
-current timestamp. Used to demonstrate pytest-qt qtbot button clicking.
-"""
+""" GUI components for the demonstration program. Provides a bare bones
+interface with a single button that changes the text to the current timestamp.
+Used to demonstrate pytest-qt qtbot button clicking.  """
 import datetime
 
 from PySide import QtGui, QtCore

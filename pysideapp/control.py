@@ -1,5 +1,5 @@
-""" Application level controller for PySideApp. Handles data model and UI
-updates with MVC style architecture.
+""" Application level controller for demonstration program. Handles data model
+and UI updates with MVC style architecture.
 """
 
 from PySide import QtCore
