@@ -9,8 +9,8 @@ import time
 
 from PySide import QtTest
 
-from . import control
-from . import applog
+from pysideapp import control
+from pysideapp import applog
 
 
 class TestControl:

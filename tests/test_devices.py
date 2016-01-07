@@ -8,8 +8,8 @@ import pytest
 
 from PySide import QtCore, QtTest
 
-from . import devices
-from . import applog
+from pysideapp import devices
+from pysideapp import applog
 
 class TestBasicDevice:
 
