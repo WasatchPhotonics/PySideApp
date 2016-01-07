@@ -78,8 +78,12 @@ Converting to a new project:
 
     Update README.md, replace PySideApp with FastPM100
 
+    Update .travis.yml, replace pysideapp module name with fastpm100.
+
     Update scripts/Application_InnoSetup.iss, change MyAppName from
     PySideApp to FastPM100 and module_name pysideapp to fastpm100.
+    Generate a new UID for this application with the InnoSetup
+    interface.
 
     Update scripts/py2exe_application.py, change project_name from
     PySideApp to FastPM100 and module_name pysideapp to fastpm100.
@@ -90,3 +94,5 @@ Converting to a new project:
 
     git init
     git add ./
+
+    Update travis, appveyor and coveralls badges after CI setup.
