@@ -29,7 +29,7 @@ class TestBasicWindow:
     def test_form_has_text_and_button_controls(self, my_form, qtbot):
         QtTest.QTest.qWaitForWindowShown(my_form)
 
-        assert my_form.lbl_info.text() == "PySideApp Default"
+        assert my_form.lbl_info.text() == "Application Default"
         assert my_form.width() == 400
         assert my_form.height() == 400
 
@@ -37,7 +37,7 @@ class TestBasicWindow:
         QtTest.QTest.qWaitForWindowShown(my_form)
 
         assert my_form.button.text() == "Change Text"
-        assert my_form.lbl_info.text() == "PySideApp Default"
+        assert my_form.lbl_info.text() == "Application Default"
 
         qtbot.mouseClick(my_form.button, QtCore.Qt.LeftButton)
 

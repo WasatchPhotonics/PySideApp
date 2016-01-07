@@ -70,8 +70,3 @@ after_test:
 artifacts:
    - path: scripts\built-dist\*.exe
    - path: scripts\windows_installer\*.exe
-
-#on_success:
-#- ps: "ls scripts\\built-dist-PySideApp\\*"
-#- ps: "ls scripts\\windows_installer\\*"
-#- path: scripts\built-dist-PySideApp\*

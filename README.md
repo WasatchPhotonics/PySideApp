@@ -61,13 +61,12 @@ Converting to a new project:
     is FastPM100, you would do:
 
     cd projects
-    mkdir FastPM100
-    cd FastPM100
-    cp -r ../PySideApp/ .
+    git clone https://github.com/WasatchPhotonics/PySideApp FastPM100
 
+    cd FastPM100
+    rm -rf .git
     mv pysideapp fastpm100
 
-    mv scripts/PySideApp.py scripts/FastPM100.py
-    mv scripts/PySideApp_InnoSetup.iss scripts/FastPM100_InnoSetup.iss
-    mv scripts/built-dist-PySideApp/ scripts/built-dist-FastPM100/
+    In setup.py, change the name, and test_suite fields from pysideapp
+    to fastpm100.
 

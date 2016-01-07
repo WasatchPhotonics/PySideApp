@@ -34,7 +34,7 @@ class BasicWindow(QtGui.QMainWindow):
         self.lbl_logo.setPixmap(QtGui.QPixmap(logo_filename))
         self.vbox.addWidget(self.lbl_logo)
 
-        self.lbl_info = QtGui.QLabel("PySideApp Default")
+        self.lbl_info = QtGui.QLabel("Application Default")
         self.vbox.addWidget(self.lbl_info)
 
         self.button = QtGui.QPushButton("Change Text")
