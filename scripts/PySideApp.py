@@ -1,4 +1,4 @@
-""" BlueGraph - application control for visualization of data.
+""" PySideApp - demonstrate application framework with testing.
 """
 
 import sys
