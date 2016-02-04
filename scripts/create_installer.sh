@@ -12,8 +12,8 @@ pyinstaller \
     --noconfirm \
     --clean \
     --windowed \
-    --icon fastpm100/assets/images/ApplicationIcon.ico \
+    --icon pysideapp/assets/images/ApplicationIcon.ico \
     --specpath scripts \
-    scripts/FastPM100.py
+    scripts/PySideApp.py
 
 /c/Program\ Files\ \(x86\)/Inno\ Setup\ 5/iscc.exe scripts/Application_InnoSetup.iss

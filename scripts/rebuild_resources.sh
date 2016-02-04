@@ -24,4 +24,4 @@ $CMD_NAME \
 #echo "Rebuilding uic forms"
 #$UIC_NAME \
 #    pysideapp/assets/placeholder_layout.ui\
-#    -o fastpm100/assets/placeholer_layout.py
+#    -o pysideapp/assets/placeholder_layout.py
