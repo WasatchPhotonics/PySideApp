@@ -52,9 +52,11 @@ after_test:
       --workpath=scripts/work-path \
       --noconfirm \
       --clean \
-      --icon fastpm100/assets/images/ApplicationIcon.ico \
+      --windowed \
+      --icon pysideapp/assets/images/ApplicationIcon.ico \
       --specpath scripts \
-      scripts/FastPM100.py"
+      scripts/PySideApp.py"
+
       
    - "iscc scripts\\Application_InnoSetup.iss"
    - ps: "ls scripts\\built-dist\\*.exe"
