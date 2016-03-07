@@ -33,7 +33,10 @@ install:
   #- "pip install setuptools==19.3"
   # Older setuptools
   #- "pip install setuptools==19.2"
-  # No setuptools
+  # No setuptools - which causes same failure on pyinstaller below
+  # Explicit distribute:
+  - "pip install distribute==0.7.3"
+  - "pip install setuptools==19.3"
 
   - "pip install pyinstaller"
   - "pip install six"
