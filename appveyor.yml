@@ -22,7 +22,7 @@ install:
 
   # Mimic of development machine miniconda setup
   - conda create --name test-environment python=%PYTHON_VERSION% numpy pyqtgraph pyside
-  - conda remove --name test-environment setuptools
+  # - conda remove --name test-environment setuptools
   - activate test-environment
 
   # On 2016-03-03ish, rebuilt a previous commit, and now it says
@@ -39,8 +39,11 @@ install:
   #- "pip install setuptools==19.3"
 
   # Which says requirement conflict, trying 0.6.45
-  - "pip install distribute==0.6.45"
-  - "pip install setuptools==19.3"
+  #- "pip install distribute==0.6.45"
+  #- "pip install setuptools==19.3"
+  #
+  # Which says 0.6.45 already installed, trying to leave in original
+  # setuptools
 
   - "pip install pyinstaller"
   - "pip install six"
