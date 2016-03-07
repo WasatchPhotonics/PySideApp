@@ -28,10 +28,12 @@ install:
   # On 2016-03-03ish, rebuilt a previous commit, and now it says
   # distribute version 0.0 cannot be found on setuptools install. Trying
   # explicit distribute package version first
-
+  # Original
   # https://github.com/pyinstaller/pyinstaller/issues/1781
   #- "pip install setuptools==19.3"
-  - "pip install setuptools==19.2"
+  # Older setuptools
+  #- "pip install setuptools==19.2"
+  # No setuptools
 
   - "pip install pyinstaller"
   - "pip install six"
