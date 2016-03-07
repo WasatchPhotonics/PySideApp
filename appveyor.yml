@@ -22,28 +22,16 @@ install:
 
   # Mimic of development machine miniconda setup
   - conda create --name test-environment python=%PYTHON_VERSION% numpy pyqtgraph pyside
-  # - conda remove --name test-environment setuptools
   - activate test-environment
 
-  # On 2016-03-03ish, rebuilt a previous commit, and now it says
-  # distribute version 0.0 cannot be found on setuptools install. Trying
-  # explicit distribute package version first
-  # Original
+  # On 2016-03-04ish, a build now works with default setuptools -
+  # unforutnately, this increase in compatibility manifests as a build
+  # error. Something about distribute being the wrong version and/or
+  # choco failures
+  #- conda remove --name test-environment setuptools
+  #- activate test-environment
   # https://github.com/pyinstaller/pyinstaller/issues/1781
   #- "pip install setuptools==19.3"
-  # Older setuptools
-  #- "pip install setuptools==19.2"
-  # No setuptools - which causes same failure on pyinstaller below
-  # Explicit distribute:
-  #- "pip install distribute==0.7.3"
-  #- "pip install setuptools==19.3"
-
-  # Which says requirement conflict, trying 0.6.45
-  #- "pip install distribute==0.6.45"
-  #- "pip install setuptools==19.3"
-  #
-  # Which says 0.6.45 already installed, trying to leave in original
-  # setuptools
 
   - "pip install pyinstaller"
   - "pip install six"
