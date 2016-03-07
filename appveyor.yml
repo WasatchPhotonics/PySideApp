@@ -35,7 +35,11 @@ install:
   #- "pip install setuptools==19.2"
   # No setuptools - which causes same failure on pyinstaller below
   # Explicit distribute:
-  - "pip install distribute==0.7.3"
+  #- "pip install distribute==0.7.3"
+  #- "pip install setuptools==19.3"
+
+  # Which says requirement conflict, trying 0.6.45
+  - "pip install distribute==0.6.45"
   - "pip install setuptools==19.3"
 
   - "pip install pyinstaller"
