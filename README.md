@@ -85,8 +85,9 @@ Converting to a new project:
     Generate a new UID for this application with the InnoSetup
     interface.
 
-    Update scripts/py2exe_application.py, change project_name from
-    PySideApp to FastPM100 and module_name pysideapp to fastpm100.
+    Update scripts/create_installer.sh, change pysideapp in icon assets
+    directory to fastpm100. Change scripts/PySideApp.py to
+    scripts/AutoFallOff.py
 
     Update scripts/FastPM100.py change the module name references from
     pysideapp to fastpm100. Change the Class name from PySideApplication
@@ -94,5 +95,24 @@ Converting to a new project:
 
     git init
     git add ./
+    git commit -a -m "Initial pysideapp conversion"
 
+    Create project on github
+    git remote add origin https://github.com/WasatchPhotonics/FastPM100.git
+    git push -u origin master
+
+    Use travis, appveyor, coveralls web interfaces to enable CI builds.
     Update travis, appveyor and coveralls badges after CI setup.
+
+    To build the installer on windows, run:
+    Install InnoSetup 5.5.1
+    Install git-bash 2.7.2
+    Install python(xy) 2.7.10
+
+    cd AutoFallOff
+    pip install pyinstaller
+    python setup.py develop
+    ./scripts/create_installer.sh
+
+    The appveyor configuration builds this as well, using conda and
+    nuget for package installations.
