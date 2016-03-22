@@ -20,7 +20,7 @@ goals are:
 
     Continuous Integration ready:
         Example travis configuration
-        Draft appveyor configuration
+        Example appveyor configuration
 
     Multiprocessing:
         Provide framework for long-polling reads from hardware
@@ -30,7 +30,7 @@ goals are:
         Log from multiple processes on multiple platforms
 
     Executable building:
-        Use py2exe to build a distributable binary on Windows
+        Use pyinstaller to build a distributable binary on Windows
 
     Installer creation:
         Example InnoSetup configuration file for installer distribution.
