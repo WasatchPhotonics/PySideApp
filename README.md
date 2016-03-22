@@ -80,6 +80,11 @@ Converting to a new project:
 
     Update .travis.yml, replace pysideapp module name with fastpm100.
 
+    Update appveyor.yml, in pyinstall section, change pysideapp in
+    assets directory to fastpm100.  Change scripts/PySideApp.py to
+    scripts/AutoFallOff.py.  Change PySideApp.zip file entries to
+    FastPM100.zip
+
     Update scripts/Application_InnoSetup.iss, change MyAppName from
     PySideApp to FastPM100 and module_name pysideapp to fastpm100.
     Generate a new UID for this application with the InnoSetup
