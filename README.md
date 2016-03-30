@@ -82,7 +82,7 @@ Converting to a new project:
 
     Update appveyor.yml, in pyinstall section, change pysideapp in
     assets directory to fastpm100.  Change scripts/PySideApp.py to
-    scripts/AutoFallOff.py.  Change PySideApp.zip file entries to
+    scripts/FastPM100.py.  Change PySideApp.zip file entries to
     FastPM100.zip
 
     Update scripts/Application_InnoSetup.iss, change MyAppName from
@@ -92,7 +92,7 @@ Converting to a new project:
 
     Update scripts/create_installer.sh, change pysideapp in icon assets
     directory to fastpm100. Change scripts/PySideApp.py to
-    scripts/AutoFallOff.py
+    scripts/FastPM100.py
 
     Update scripts/FastPM100.py change the module name references from
     pysideapp to fastpm100. Change the Class name from PySideApplication
