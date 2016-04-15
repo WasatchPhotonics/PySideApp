@@ -32,6 +32,7 @@ install:
   #- activate test-environment
   # https://github.com/pyinstaller/pyinstaller/issues/1781
   #- "pip install setuptools==19.3"
+  # 201604151537 testing the rebuild at appveyor 
 
   - "pip install pyinstaller"
   - "pip install six"
