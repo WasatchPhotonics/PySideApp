@@ -83,7 +83,6 @@ def main(argv=None):
     log.debug("Arguments: %s", argv)
 
     exit_code = 0
-    print "Application exec"
     try:
         go_app = PySideApplication()
         go_app.parse_args(argv)
