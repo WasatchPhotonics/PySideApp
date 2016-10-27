@@ -6,7 +6,7 @@ The general approach is that the control portion of the application instantiates
 a MainLogger object below. This will create a separate process that looks for
 log events on a queue. Each process of the application then registers a queue
 handler, and writes its log events. The MainLogger loop will collect and write
-these log events to file and any any other defined logging location.
+these log events to file and any other defined logging location.
 
 """
 import os
@@ -70,10 +70,11 @@ def get_text_from_log():
     """
 
     log_text = ""
-    log_file = open(get_location())
-    for line_read in log_file:
-        log_text += line_read
-    log_file.close()
+
+    with open(get_location()) as log_file:
+        for line_read in log_file:
+            log_text += line_read
+
     return log_text
 
 

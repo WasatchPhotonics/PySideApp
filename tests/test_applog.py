@@ -115,7 +115,7 @@ class TestLogFile():
         # queue handler. Get a reference to the root_log and write a debug log
         # entry. In a real application the module level log =
         # logging.getLogger(__name__) still will be called, but then the log
-        # module level variable will be overwritten witht the root logger
+        # module level variable will be overwritten with the root logger
         # created in the applog.process_log_configure call above.
         root_log = logging.getLogger()
 
