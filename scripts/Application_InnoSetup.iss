@@ -62,6 +62,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "built-dist\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
+; There are many ways to include a Visual Studio runtime distributable. This way is to copy the dll into the application folder.
+Source: "support_files\msvcr100.dll"; DestDir: "{app}\autofalloff\"; Flags: recursesubdirs ignoreversion
+
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -70,4 +74,3 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppName}\{#MyAppExeNa
 
 [Run]
 Filename: "{app}\{#MyAppName}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-
