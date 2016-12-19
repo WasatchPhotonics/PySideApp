@@ -51,7 +51,7 @@ OutputBaseFilename={#MyAppName}_setup
 Compression=lzma
 SolidCompression=yes
 SetupIconFile=..\{#module_name}\assets\images\ApplicationIcon.ico
-UninstallDisplayIcon={app}\{#MyAppExeName}
+UninstallDisplayIcon={app}\{#MyAppName}\{#MyAppExeName}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
